@@ -67,10 +67,10 @@ private:
     {
         audioBufferQueue.pop (sampleData.data());
 
-        auto fftSize = (size_t) fft.getSize();
+        //auto fftSize = (size_t) fft.getSize();
 
-        static constexpr auto mindB = SampleType (-160);
-        static constexpr auto maxdB = SampleType (0);
+        //static constexpr auto mindB = SampleType (-160);
+        //static constexpr auto maxdB = SampleType (0);
 
         repaint();
     }

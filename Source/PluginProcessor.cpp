@@ -168,24 +168,19 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     for (int i = 0; i < audioEngine.getNumVoices(); i++)
     {
         //if myVoice sucessfully casts as a SynthVoice*, get the voice and set the params
-        if (voice = dynamic_cast<Voice*>(audioEngine.getVoice(i)))
-        {
-            voice->setWaveForm1(waveForm1);
-            voice->setOctave1((float)*parametrs.getRawParameterValue("octave1"));
-            voice->setTranspose1((float)*parametrs.getRawParameterValue("trans1"));
-            voice->setTune1((float)*parametrs.getRawParameterValue("tune1"));
-            voice->setLevel1((float)*parametrs.getRawParameterValue("level1"));
+        voice = dynamic_cast<Voice*>(audioEngine.getVoice(i));
+        
+        voice->setWaveForm1(waveForm1);
+        voice->setOctave1((float)*parametrs.getRawParameterValue("octave1"));
+        voice->setTranspose1((float)*parametrs.getRawParameterValue("trans1"));
+        voice->setTune1((float)*parametrs.getRawParameterValue("tune1"));
+        voice->setLevel1((float)*parametrs.getRawParameterValue("level1"));
 
-            voice->setWaveForm2(waveForm2);
-            voice->setOctave2((float)*parametrs.getRawParameterValue("octave2"));
-            voice->setTranspose2((float)*parametrs.getRawParameterValue("trans2"));
-            voice->setTune2((float)*parametrs.getRawParameterValue("tune2"));
-            voice->setLevel2((float)*parametrs.getRawParameterValue("level2"));
-
-
-
-            //Logger::writeToLog((String)(int)*parametrs.getRawParameterValue("octave1"));
-        }
+        voice->setWaveForm2(waveForm2);
+        voice->setOctave2((float)*parametrs.getRawParameterValue("octave2"));
+        voice->setTranspose2((float)*parametrs.getRawParameterValue("trans2"));
+        voice->setTune2((float)*parametrs.getRawParameterValue("tune2"));
+        voice->setLevel2((float)*parametrs.getRawParameterValue("level2"));
     }
     
     midiMessages.clear();

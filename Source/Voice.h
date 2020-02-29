@@ -40,13 +40,14 @@ public:
     //==============================================================================
     void noteStarted() override
     {
-        auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
+        //auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
         auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
 
         float freq1 = freqHz * pow(2, octave1 + (tune1 + transp1) / 12);
         float freq2 = freqHz * pow(2, octave2 + (tune2 + transp2) / 12);
-
-        Logger::writeToLog((String)freq2 + " " + (String)octave1 + " " + (String)transp1 + " " + (String)tune1);
+        
+        Logger::writeToLog((String)freq1 + " " + (String)octave1 + " " + (String)transp1 + " " + (String)tune1);
+        Logger::writeToLog((String)freq2 + " " + (String)octave2 + " " + (String)transp2 + " " + (String)tune2);
     }
 
     //==============================================================================

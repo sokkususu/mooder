@@ -52,7 +52,6 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
 
 
     //[Constructor] You can add your own custom stuff here..
-    auto area = getLocalBounds();
 
     midiKeyboardState.addListener(&processor.getMidiMessageCollector());
     midiKeyboardComponent.setBounds(0, 320, 240, 100);
