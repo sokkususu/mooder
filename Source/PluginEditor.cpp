@@ -44,11 +44,15 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     addAndMakeVisible (component2.get());
     component2->setBounds (0, 160, 480, 160);
 
+    component3.reset (new Filter());
+    addAndMakeVisible (component3.get());
+    component3->setBounds (480, 0, 480, 320);
+
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (480, 420);
+    setSize (960, 420);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -67,6 +71,7 @@ MooderAudioProcessorEditor::~MooderAudioProcessorEditor()
 
     component = nullptr;
     component2 = nullptr;
+    component3 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -114,7 +119,7 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor"
                  constructorParams="MooderAudioProcessor &amp;p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p), scopeComponent(processor.getAudioBufferQueue())"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="480" initialHeight="420">
+                 fixedSize="1" initialWidth="960" initialHeight="420">
   <BACKGROUND backgroundColour="ff323e44"/>
   <JUCERCOMP name="" id="74dc897685dd5775" memberName="component" virtualName=""
              explicitFocusOrder="0" pos="0 0 480 160" sourceFile="OscillatorComponent.cpp"
@@ -122,6 +127,9 @@ BEGIN_JUCER_METADATA
   <JUCERCOMP name="" id="90a5c6d12f7447c2" memberName="component2" virtualName=""
              explicitFocusOrder="0" pos="0 160 480 160" sourceFile="Oscillator2Component.cpp"
              constructorParams="p"/>
+  <JUCERCOMP name="" id="2f6bdedfd7ffb8a4" memberName="component3" virtualName=""
+             explicitFocusOrder="0" pos="480 0 480 320" sourceFile="Filter.cpp"
+             constructorParams=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

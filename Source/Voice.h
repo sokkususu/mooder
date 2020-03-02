@@ -19,6 +19,16 @@ public:
         auto& masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
 
+        auto& filterLP = processorChain.get<filterHPIndex>();
+        filterLP.setMode(juce::dsp::LadderFilter<float>::Mode::LPF12);
+        filterLP.setCutoffFrequencyHz(2000.0f);
+        filterLP.setResonance(0.7f);
+
+        auto& filterHP = processorChain.get<filterHPIndex>();
+        filterHP.setMode(juce::dsp::LadderFilter<float>::Mode::HPF12);
+        filterHP.setCutoffFrequencyHz(20.0f);
+        filterHP.setResonance(0.7f);
+
         level1 = 0.7f;
         tune1 = 1.0f;
         octave1 = 0;
@@ -124,8 +134,15 @@ private:
     {
         osc1Index,
         osc2Index,
+        filterHPIndex,
+        filterLPIndex,
         masterGainIndex
     };
 
-    juce::dsp::ProcessorChain<CustomOscillator<float>, CustomOscillator<float>, juce::dsp::Gain<float>> processorChain;
+    juce::dsp::ProcessorChain<
+        CustomOscillator<float>, 
+        CustomOscillator<float>, 
+        juce::dsp::LadderFilter<float>,
+        juce::dsp::LadderFilter<float>, 
+        juce::dsp::Gain<float>> processorChain;
 };

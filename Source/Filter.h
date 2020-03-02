@@ -20,14 +20,9 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "PluginProcessor.h"
-#include "ScopeComponent.h"
+#include <JuceHeader.h>
 //[/Headers]
 
-#include "OscillatorComponent.h"
-#include "Oscillator2Component.h"
-#include "Filter.h"
 
 
 //==============================================================================
@@ -38,12 +33,14 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MooderAudioProcessorEditor  : public AudioProcessorEditor
+class Filter  : public Component,
+                public Slider::Listener,
+                public Button::Listener
 {
 public:
     //==============================================================================
-    MooderAudioProcessorEditor (MooderAudioProcessor &p);
-    ~MooderAudioProcessorEditor() override;
+    Filter ();
+    ~Filter() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -51,27 +48,30 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
+    void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MooderAudioProcessor& processor;
-
-    MidiKeyboardState midiKeyboardState;
-    MidiKeyboardComponent midiKeyboardComponent { midiKeyboardState,
-        MidiKeyboardComponent::horizontalKeyboard };
-    ScopeComponent<float> scopeComponent;
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<OscillatorComponent> component;
-    std::unique_ptr<Oscillator2Component> component2;
-    std::unique_ptr<Filter> component3;
+    std::unique_ptr<Slider> octaveSlider;
+    std::unique_ptr<Label> label2;
+    std::unique_ptr<Label> label1;
+    std::unique_ptr<Slider> transSlider;
+    std::unique_ptr<Label> label3;
+    std::unique_ptr<Slider> tuneSlider;
+    std::unique_ptr<Label> label4;
+    std::unique_ptr<Slider> levelSlider;
+    std::unique_ptr<Label> label5;
+    std::unique_ptr<ToggleButton> activateButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MooderAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Filter)
 };
 
 //[EndFile] You can add extra defines here...
