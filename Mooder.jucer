@@ -6,8 +6,6 @@
               pluginDesc="Mooder" pluginManufacturer="ShulyakDmitry">
   <MAINGROUP id="R3DJOe" name="Mooder">
     <GROUP id="{1B3E5D89-9026-2D17-1D92-19D66EB1EF86}" name="Components">
-      <FILE id="hDTmTi" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
-      <FILE id="TuRwfQ" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
       <FILE id="WYvuXF" name="Oscillator2Component.cpp" compile="1" resource="0"
             file="Source/Oscillator2Component.cpp"/>
       <FILE id="q8vvRU" name="Oscillator2Component.h" compile="0" resource="0"
