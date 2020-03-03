@@ -27,7 +27,6 @@
 
 #include "OscillatorComponent.h"
 #include "Oscillator2Component.h"
-#include "Filter.h"
 
 
 //==============================================================================
@@ -67,7 +66,6 @@ private:
     //==============================================================================
     std::unique_ptr<OscillatorComponent> component;
     std::unique_ptr<Oscillator2Component> component2;
-    std::unique_ptr<Filter> component3;
 
 
     //==============================================================================
