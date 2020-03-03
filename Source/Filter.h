@@ -39,7 +39,7 @@ class Filter  : public Component,
 {
 public:
     //==============================================================================
-    Filter ();
+    Filter (MooderAudioProcessor& p);
     ~Filter() override;
 
     //==============================================================================
@@ -55,13 +55,14 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    MooderAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<Slider> octaveSlider;
+    std::unique_ptr<Slider> rezLPSlider;
     std::unique_ptr<Label> label2;
     std::unique_ptr<Label> label1;
-    std::unique_ptr<Slider> transSlider;
+    std::unique_ptr<Slider> freqLPSlider;
     std::unique_ptr<Label> label3;
     std::unique_ptr<Slider> tuneSlider;
     std::unique_ptr<Label> label4;

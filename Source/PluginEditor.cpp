@@ -44,7 +44,7 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     addAndMakeVisible (component2.get());
     component2->setBounds (0, 160, 480, 160);
 
-    component3.reset (new Filter());
+    component3.reset (new Filter (p));
     addAndMakeVisible (component3.get());
     component3->setBounds (480, 0, 480, 320);
 
@@ -129,7 +129,7 @@ BEGIN_JUCER_METADATA
              constructorParams="p"/>
   <JUCERCOMP name="" id="2f6bdedfd7ffb8a4" memberName="component3" virtualName=""
              explicitFocusOrder="0" pos="480 0 480 320" sourceFile="Filter.cpp"
-             constructorParams=""/>
+             constructorParams="p"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

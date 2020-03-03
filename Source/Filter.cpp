@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "PluginProcessor.h"
 //[/Headers]
 
 #include "Filter.h"
@@ -27,19 +28,20 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-Filter::Filter ()
+Filter::Filter (MooderAudioProcessor& p)
+    : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    octaveSlider.reset (new Slider ("octaveSlider"));
-    addAndMakeVisible (octaveSlider.get());
-    octaveSlider->setRange (0, 100, 1);
-    octaveSlider->setSliderStyle (Slider::Rotary);
-    octaveSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    octaveSlider->addListener (this);
+    rezLPSlider.reset (new Slider ("rezLPSlider"));
+    addAndMakeVisible (rezLPSlider.get());
+    rezLPSlider->setRange (0, 100, 1);
+    rezLPSlider->setSliderStyle (Slider::Rotary);
+    rezLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    rezLPSlider->addListener (this);
 
-    octaveSlider->setBounds (80, 218, 65, 85);
+    rezLPSlider->setBounds (80, 218, 65, 85);
 
     label2.reset (new Label ("label",
                              TRANS("res")));
@@ -63,14 +65,14 @@ Filter::Filter ()
 
     label1->setBounds (215, 3, 50, 18);
 
-    transSlider.reset (new Slider ("transSlider"));
-    addAndMakeVisible (transSlider.get());
-    transSlider->setRange (20, 20000, 1);
-    transSlider->setSliderStyle (Slider::Rotary);
-    transSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    transSlider->addListener (this);
+    freqLPSlider.reset (new Slider ("freqLPSlider"));
+    addAndMakeVisible (freqLPSlider.get());
+    freqLPSlider->setRange (20, 20000, 1);
+    freqLPSlider->setSliderStyle (Slider::Rotary);
+    freqLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    freqLPSlider->addListener (this);
 
-    transSlider->setBounds (165, 218, 65, 85);
+    freqLPSlider->setBounds (165, 218, 65, 85);
 
     label3.reset (new Label ("label",
                              TRANS("freq")));
@@ -85,7 +87,7 @@ Filter::Filter ()
 
     tuneSlider.reset (new Slider ("tuneSlider"));
     addAndMakeVisible (tuneSlider.get());
-    tuneSlider->setRange (20, 20000, 1);
+    tuneSlider->setRange (20, 2000, 1);
     tuneSlider->setSliderStyle (Slider::Rotary);
     tuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     tuneSlider->addListener (this);
@@ -139,6 +141,7 @@ Filter::Filter ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    freqLPSlider->setValue(20000.0f);
     //[/Constructor]
 }
 
@@ -147,10 +150,10 @@ Filter::~Filter()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    octaveSlider = nullptr;
+    rezLPSlider = nullptr;
     label2 = nullptr;
     label1 = nullptr;
-    transSlider = nullptr;
+    freqLPSlider = nullptr;
     label3 = nullptr;
     tuneSlider = nullptr;
     label4 = nullptr;
@@ -189,24 +192,28 @@ void Filter::sliderValueChanged (Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == octaveSlider.get())
+    if (sliderThatWasMoved == rezLPSlider.get())
     {
-        //[UserSliderCode_octaveSlider] -- add your slider handling code here..
-        //[/UserSliderCode_octaveSlider]
+        //[UserSliderCode_rezLPSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(9, sliderThatWasMoved->getValue() / 100);
+        //[/UserSliderCode_rezLPSlider]
     }
-    else if (sliderThatWasMoved == transSlider.get())
+    else if (sliderThatWasMoved == freqLPSlider.get())
     {
-        //[UserSliderCode_transSlider] -- add your slider handling code here..
-        //[/UserSliderCode_transSlider]
+        //[UserSliderCode_freqLPSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(8, sliderThatWasMoved->getValue() / 19980);
+        //[/UserSliderCode_freqLPSlider]
     }
     else if (sliderThatWasMoved == tuneSlider.get())
     {
         //[UserSliderCode_tuneSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(10, sliderThatWasMoved->getValue() / 1980);
         //[/UserSliderCode_tuneSlider]
     }
     else if (sliderThatWasMoved == levelSlider.get())
     {
         //[UserSliderCode_levelSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(11, sliderThatWasMoved->getValue() / 100);
         //[/UserSliderCode_levelSlider]
     }
 
@@ -245,11 +252,12 @@ void Filter::buttonClicked (Button* buttonThatWasClicked)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="Filter" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="480" initialHeight="320">
+                 parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
+                 variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="480"
+                 initialHeight="320">
   <BACKGROUND backgroundColour="ff323e44"/>
-  <SLIDER name="octaveSlider" id="56f2a6e81fe5f959" memberName="octaveSlider"
+  <SLIDER name="rezLPSlider" id="56f2a6e81fe5f959" memberName="rezLPSlider"
           virtualName="" explicitFocusOrder="0" pos="80 218 65 85" min="0.0"
           max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
@@ -264,7 +272,7 @@ BEGIN_JUCER_METADATA
          edBkgCol="0" labelText="Filter" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="transSlider" id="bef96203430a69c3" memberName="transSlider"
+  <SLIDER name="freqLPSlider" id="bef96203430a69c3" memberName="freqLPSlider"
           virtualName="" explicitFocusOrder="0" pos="165 218 65 85" min="20.0"
           max="20000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
@@ -276,7 +284,7 @@ BEGIN_JUCER_METADATA
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="tuneSlider" id="4f1fb4ab86f17cd7" memberName="tuneSlider"
           virtualName="" explicitFocusOrder="0" pos="249 218 65 85" min="20.0"
-          max="20000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          max="2000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="ebeda905bdad0cb" memberName="label4" virtualName=""
