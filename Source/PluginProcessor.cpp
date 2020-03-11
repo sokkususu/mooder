@@ -38,6 +38,11 @@ MooderAudioProcessor::MooderAudioProcessor()
 
             std::make_unique<AudioParameterFloat>("freqFilterHP", "FreqHP", NormalisableRange<float>(20.0f, 2000.0f), 20.0f),
             std::make_unique<AudioParameterFloat>("rezFilterHP", "RezHP", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
+        
+            std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
+            std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.1f, 2.0f), 0.8f),
+            std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.1f, 1.0f), 0.8f),
+            std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.1f, 5.0f), 0.1f),
         }), waveForm1(1), waveForm2(1)
 #endif
 {
@@ -113,7 +118,7 @@ void MooderAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void MooderAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-
+    lastSampleRate = sampleRate;
     audioEngine.prepare ({ sampleRate, (uint32) samplesPerBlock, 2 });
     midiMessageCollector.reset (sampleRate);
 }
@@ -176,6 +181,8 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
         //if myVoice sucessfully casts as a SynthVoice*, get the voice and set the params
         voice = dynamic_cast<Voice*>(audioEngine.getVoice(i));
         
+        voice->setADSRSampleRate(lastSampleRate);
+        
         voice->setWaveForm1(waveForm1);
         voice->setOctave1((float)*parametrs.getRawParameterValue("octave1"));
         voice->setTranspose1((float)*parametrs.getRawParameterValue("trans1"));
@@ -193,6 +200,8 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
         voice->setFreqFilterHP((float)*parametrs.getRawParameterValue("freqFilterHP"));
         voice->setRezFilterHP((float)*parametrs.getRawParameterValue("rezFilterHP"));
+        
+        voice->setADSRSParams((float)*parametrs.getRawParameterValue("attack"), (float)*parametrs.getRawParameterValue("decay"), (float)*parametrs.getRawParameterValue("sustain"), (float)*parametrs.getRawParameterValue("release"));
     }
     
     midiMessages.clear();

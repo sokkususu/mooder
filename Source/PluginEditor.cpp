@@ -44,9 +44,13 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     addAndMakeVisible (component2.get());
     component2->setBounds (0, 160, 480, 160);
 
-    component3.reset (new Filter (p));
+    component3.reset (new FilterComponent (p));
     addAndMakeVisible (component3.get());
-    component3->setBounds (480, 0, 480, 320);
+    component3->setBounds (480, 0, 480, 160);
+
+    component4.reset (new ADSRComponent (p));
+    addAndMakeVisible (component4.get());
+    component4->setBounds (480, 160, 480, 160);
 
 
     //[UserPreSize]
@@ -58,9 +62,9 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     //[Constructor] You can add your own custom stuff here..
 
     midiKeyboardState.addListener(&processor.getMidiMessageCollector());
-    midiKeyboardComponent.setBounds(0, 320, 240, 100);
+    midiKeyboardComponent.setBounds(0, 320, 480, 100);
 
-    scopeComponent.setBounds(240, 320, 240, 100);
+    scopeComponent.setBounds(480, 320, 480, 100);
     //[/Constructor]
 }
 
@@ -72,6 +76,7 @@ MooderAudioProcessorEditor::~MooderAudioProcessorEditor()
     component = nullptr;
     component2 = nullptr;
     component3 = nullptr;
+    component4 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -85,7 +90,7 @@ void MooderAudioProcessorEditor::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff323e44));
+    g.fillAll (Colours::cornflowerblue);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -120,7 +125,7 @@ BEGIN_JUCER_METADATA
                  constructorParams="MooderAudioProcessor &amp;p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p), scopeComponent(processor.getAudioBufferQueue())"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="960" initialHeight="420">
-  <BACKGROUND backgroundColour="ff323e44"/>
+  <BACKGROUND backgroundColour="ff6495ed"/>
   <JUCERCOMP name="" id="74dc897685dd5775" memberName="component" virtualName=""
              explicitFocusOrder="0" pos="0 0 480 160" sourceFile="OscillatorComponent.cpp"
              constructorParams="p"/>
@@ -128,7 +133,10 @@ BEGIN_JUCER_METADATA
              explicitFocusOrder="0" pos="0 160 480 160" sourceFile="Oscillator2Component.cpp"
              constructorParams="p"/>
   <JUCERCOMP name="" id="2f6bdedfd7ffb8a4" memberName="component3" virtualName=""
-             explicitFocusOrder="0" pos="480 0 480 320" sourceFile="Filter.cpp"
+             explicitFocusOrder="0" pos="480 0 480 160" sourceFile="FilterComponent.cpp"
+             constructorParams="p"/>
+  <JUCERCOMP name="" id="4b9d246e4d617cb8" memberName="component4" virtualName=""
+             explicitFocusOrder="0" pos="480 160 480 160" sourceFile="ADSRComponent.cpp"
              constructorParams="p"/>
 </JUCER_COMPONENT>
 
