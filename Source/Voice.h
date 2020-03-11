@@ -81,7 +81,6 @@ public:
     //==============================================================================
     void noteStopped(bool) override
     {
-        adsr.noteOff();
         clearCurrentNote();
     }
 
@@ -118,9 +117,6 @@ public:
         auto& filterHP = processorChain.get<filterHPIndex>();
         filterHP.setCutoffFrequencyHz(freqFilterHP);
         filterHP.setResonance(rezFilterHP);
-        
-        adsr.setParameters (adsrParams);
-        adsr.applyEnvelopeToBuffer(outputBuffer, startSample, numSamples);
 
         juce::dsp::AudioBlock<float> (outputBuffer)
             .getSubBlock ((size_t) startSample, (size_t) numSamples)
