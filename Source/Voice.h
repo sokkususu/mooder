@@ -16,7 +16,7 @@ class Voice : public juce::MPESynthesiserVoice
 public:
     Voice()
     {
-        auto& masterGain = processorChain.get<masterGainIndex>();
+        auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
 
         level1 = 0.7f;
@@ -31,7 +31,7 @@ public:
     }
 
     //==============================================================================
-    void prepare(const juce::dsp::ProcessSpec& spec)
+    void prepare(const juce::dsp::ProcessSpec &spec)
     {
         tempBlock = juce::dsp::AudioBlock<float>(heapBlock, spec.numChannels, spec.maximumBlockSize);
         processorChain.prepare(spec);
@@ -45,7 +45,7 @@ public:
 
         float freq1 = freqHz * pow(2, octave1 + (tune1 + transp1) / 12);
         float freq2 = freqHz * pow(2, octave2 + (tune2 + transp2) / 12);
-        
+
         Logger::writeToLog((String)freq1 + " " + (String)octave1 + " " + (String)transp1 + " " + (String)tune1);
         Logger::writeToLog((String)freq2 + " " + (String)octave2 + " " + (String)transp2 + " " + (String)tune2);
     }
@@ -70,16 +70,16 @@ public:
 
     //==============================================================================
     void notePressureChanged() override {}
-    void noteTimbreChanged()   override {}
+    void noteTimbreChanged() override {}
     void noteKeyStateChanged() override {}
 
     //==============================================================================
-    void renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
+    void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
-        auto block = tempBlock.getSubBlock (0, (size_t) numSamples);
+        auto block = tempBlock.getSubBlock(0, (size_t)numSamples);
         block.clear();
-        juce::dsp::ProcessContextReplacing<float> context (block);
-        processorChain.process (context);
+        juce::dsp::ProcessContextReplacing<float> context(block);
+        processorChain.process(context);
 
         auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
         auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
@@ -93,9 +93,17 @@ public:
         processorChain.get<osc2Index>().setFrequency(freq2, true);
         processorChain.get<osc2Index>().setLevel(velocity * level2);
 
-        juce::dsp::AudioBlock<float> (outputBuffer)
-            .getSubBlock ((size_t) startSample, (size_t) numSamples)
-            .add (tempBlock);
+        auto &filterLP = processorChain.get<filterLPIndex>();
+        filterLP.setCutoffFrequencyHz(freqFilterLP);
+        filterLP.setResonance(rezFilterLP);
+
+        auto &filterHP = processorChain.get<filterHPIndex>();
+        filterHP.setCutoffFrequencyHz(freqFilterHP);
+        filterHP.setResonance(rezFilterHP);
+
+        juce::dsp::AudioBlock<float>(outputBuffer)
+            .getSubBlock((size_t)startSample, (size_t)numSamples)
+            .add(tempBlock);
     }
 
     void setWaveForm1(int waveForm) { processorChain.get<osc1Index>().setWaveForm(waveForm); }
