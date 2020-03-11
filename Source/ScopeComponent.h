@@ -25,7 +25,7 @@ public:
         : audioBufferQueue (queueToUse)
     {
         sampleData.fill (SampleType (0));
-        setFramesPerSecond (10);
+        setFramesPerSecond (24);
     }
 
     //==============================================================================
@@ -84,7 +84,7 @@ private:
                       SampleType offset = SampleType (0))
     {
         auto w = rect.getWidth();
-        auto h = rect.getHeight() / 3;
+        auto h = rect.getHeight() / 2;
         auto right = rect.getRight();
 
         auto center = rect.getBottom() - offset;

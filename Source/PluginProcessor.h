@@ -70,6 +70,7 @@ public:
     void setWaveForm2(int wf) { waveForm2 = wf; }
 private:
     int waveForm1, waveForm2;
+    double lastSampleRate;
 
     AudioEngine audioEngine;
     MidiMessageCollector midiMessageCollector;

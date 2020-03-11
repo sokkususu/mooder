@@ -16,9 +16,6 @@ class Voice : public juce::MPESynthesiserVoice
 public:
     Voice()
     {
-        auto &masterGain = processorChain.get<masterGainIndex>();
-        masterGain.setGainLinear(0.7f);
-
         level1 = 0.7f;
         tune1 = 1.0f;
         octave1 = 0;
@@ -28,6 +25,25 @@ public:
         tune2 = 1.0f;
         octave2 = 0;
         transp2 = 0;
+
+        freqFilterLP = 20000.0f;
+        rezFilterLP = 0.0f;
+
+        freqFilterHP = 20.0f;
+        rezFilterHP = 0.0f;
+
+        auto &masterGain = processorChain.get<masterGainIndex>();
+        masterGain.setGainLinear(0.7f);
+
+        auto &filterLP = processorChain.get<filterLPIndex>();
+        filterLP.setCutoffFrequencyHz(freqFilterLP);
+        filterLP.setResonance(rezFilterLP);
+        filterLP.setMode(juce::dsp::LadderFilter<float>::Mode::LPF24);
+
+        auto &filterHP = processorChain.get<filterHPIndex>();
+        filterHP.setCutoffFrequencyHz(freqFilterHP);
+        filterHP.setResonance(rezFilterHP);
+        filterHP.setMode(juce::dsp::LadderFilter<float>::Mode::HPF24);
     }
 
     //==============================================================================
@@ -77,7 +93,7 @@ public:
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
         auto block = tempBlock.getSubBlock(0, (size_t)numSamples);
-        block.clear();
+
         juce::dsp::ProcessContextReplacing<float> context(block);
         processorChain.process(context);
 
@@ -104,6 +120,8 @@ public:
         juce::dsp::AudioBlock<float>(outputBuffer)
             .getSubBlock((size_t)startSample, (size_t)numSamples)
             .add(tempBlock);
+
+        block.clear();
     }
 
     void setWaveForm1(int waveForm) { processorChain.get<osc1Index>().setWaveForm(waveForm); }
@@ -118,22 +136,51 @@ public:
     void setTune2(float t) { tune2 = t; }
     void setLevel2(float lvl) { level2 = lvl; }
 
+    void setFreqFilterLP(float freq) { freqFilterLP = freq; }
+    void setRezFilterLP(float rez) { rezFilterLP = rez; }
+
+    void setFreqFilterHP(float freq) { freqFilterHP = freq; }
+    void setRezFilterHP(float rez) { rezFilterHP = rez; }
+
+    void setADSRSampleRate(double sampleRate) { adsr.setSampleRate(sampleRate); }
+    void setADSRSParams(float attack, float decay, float sustain, float release)
+    {
+        adsrParams.attack = attack;
+        adsrParams.decay = decay;
+        adsrParams.sustain = sustain;
+        adsrParams.release = release;
+    }
+
 private:
     int octave1, octave2;
     float transp1, transp2;
     float tune1, tune2;
     float level1, level2;
 
+    float freqFilterLP, rezFilterLP;
+    float freqFilterHP, rezFilterHP;
+
     //==============================================================================
     juce::HeapBlock<char> heapBlock;
     juce::dsp::AudioBlock<float> tempBlock;
+
+    ADSR adsr;
+    ADSR::Parameters adsrParams;
 
     enum
     {
         osc1Index,
         osc2Index,
+        filterLPIndex,
+        filterHPIndex,
         masterGainIndex
     };
 
-    juce::dsp::ProcessorChain<CustomOscillator<float>, CustomOscillator<float>, juce::dsp::Gain<float>> processorChain;
+    juce::dsp::ProcessorChain<
+        CustomOscillator<float>,
+        CustomOscillator<float>,
+        juce::dsp::LadderFilter<float>,
+        juce::dsp::LadderFilter<float>,
+        juce::dsp::Gain<float>>
+        processorChain;
 };
