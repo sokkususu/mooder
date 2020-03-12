@@ -67,7 +67,7 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
 
     freqLPSlider.reset (new Slider ("freqLPSlider"));
     addAndMakeVisible (freqLPSlider.get());
-    freqLPSlider->setRange (20, 20000, 1);
+    freqLPSlider->setRange (20, 6000, 1);
     freqLPSlider->setSliderStyle (Slider::Rotary);
     freqLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     freqLPSlider->addListener (this);
@@ -141,7 +141,7 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
 
 
     //[Constructor] You can add your own custom stuff here..
-    freqLPSlider->setValue(20000.0f);
+    freqLPSlider->setValue(6000.0f);
     //[/Constructor]
 }
 
@@ -201,7 +201,7 @@ void FilterComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == freqLPSlider.get())
     {
         //[UserSliderCode_freqLPSlider] -- add your slider handling code here..
-        processor.setParameterNotifyingHost(8, sliderThatWasMoved->getValue() / 19980);
+        processor.setParameterNotifyingHost(8, sliderThatWasMoved->getValue() / 6980);
         //[/UserSliderCode_freqLPSlider]
     }
     else if (sliderThatWasMoved == tuneSlider.get())
@@ -274,7 +274,7 @@ BEGIN_JUCER_METADATA
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="freqLPSlider" id="bef96203430a69c3" memberName="freqLPSlider"
           virtualName="" explicitFocusOrder="0" pos="165 50 65 85" min="20.0"
-          max="20000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          max="6000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""

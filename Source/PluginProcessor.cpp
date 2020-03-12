@@ -33,7 +33,7 @@ MooderAudioProcessor::MooderAudioProcessor()
             std::make_unique<AudioParameterFloat>("tune2", "Tune2", NormalisableRange<float>(-1.0f, 1.0f), 0.0f),
             std::make_unique<AudioParameterFloat>("level2", "Level2", NormalisableRange<float>(0.0f, 1.0f), 0.7f),
 
-            std::make_unique<AudioParameterFloat>("freqFilterLP", "FreqLP", NormalisableRange<float>(20.0f, 20000.0f), 20000.0f),
+            std::make_unique<AudioParameterFloat>("freqFilterLP", "FreqLP", NormalisableRange<float>(20.0f, 7000.0f), 7000.0f),
             std::make_unique<AudioParameterFloat>("rezFilterLP", "RezLP", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
 
             std::make_unique<AudioParameterFloat>("freqFilterHP", "FreqHP", NormalisableRange<float>(20.0f, 2000.0f), 20.0f),
