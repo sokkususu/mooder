@@ -59,14 +59,14 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<Slider> rezLPSlider;
+    std::unique_ptr<Slider> attackSlider;
     std::unique_ptr<Label> label2;
     std::unique_ptr<Label> label1;
-    std::unique_ptr<Slider> freqLPSlider;
+    std::unique_ptr<Slider> decaySlider;
     std::unique_ptr<Label> label3;
-    std::unique_ptr<Slider> tuneSlider;
+    std::unique_ptr<Slider> sustainSlider;
     std::unique_ptr<Label> label4;
-    std::unique_ptr<Slider> levelSlider;
+    std::unique_ptr<Slider> releaseSlider;
     std::unique_ptr<Label> label5;
     std::unique_ptr<ToggleButton> activateButton;
 

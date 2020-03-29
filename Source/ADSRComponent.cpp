@@ -34,14 +34,14 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    rezLPSlider.reset (new Slider ("rezLPSlider"));
-    addAndMakeVisible (rezLPSlider.get());
-    rezLPSlider->setRange (0, 1, 0.01);
-    rezLPSlider->setSliderStyle (Slider::Rotary);
-    rezLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    rezLPSlider->addListener (this);
+    attackSlider.reset (new Slider ("attackSlider"));
+    addAndMakeVisible (attackSlider.get());
+    attackSlider->setRange (0, 5, 0.1);
+    attackSlider->setSliderStyle (Slider::Rotary);
+    attackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    attackSlider->addListener (this);
 
-    rezLPSlider->setBounds (80, 50, 65, 85);
+    attackSlider->setBounds (80, 50, 65, 85);
 
     label2.reset (new Label ("label",
                              TRANS("Attack")));
@@ -65,14 +65,14 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
 
     label1->setBounds (215, 3, 50, 18);
 
-    freqLPSlider.reset (new Slider ("freqLPSlider"));
-    addAndMakeVisible (freqLPSlider.get());
-    freqLPSlider->setRange (0, 1, 0.01);
-    freqLPSlider->setSliderStyle (Slider::Rotary);
-    freqLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    freqLPSlider->addListener (this);
+    decaySlider.reset (new Slider ("decaySlider"));
+    addAndMakeVisible (decaySlider.get());
+    decaySlider->setRange (0, 2, 0.1);
+    decaySlider->setSliderStyle (Slider::Rotary);
+    decaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    decaySlider->addListener (this);
 
-    freqLPSlider->setBounds (165, 50, 65, 85);
+    decaySlider->setBounds (165, 50, 65, 85);
 
     label3.reset (new Label ("label",
                              TRANS("Decay")));
@@ -85,14 +85,14 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
 
     label3->setBounds (165, 35, 65, 18);
 
-    tuneSlider.reset (new Slider ("tuneSlider"));
-    addAndMakeVisible (tuneSlider.get());
-    tuneSlider->setRange (0, 1, 0.01);
-    tuneSlider->setSliderStyle (Slider::Rotary);
-    tuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    tuneSlider->addListener (this);
+    sustainSlider.reset (new Slider ("sustainSlider"));
+    addAndMakeVisible (sustainSlider.get());
+    sustainSlider->setRange (0, 1, 0.1);
+    sustainSlider->setSliderStyle (Slider::Rotary);
+    sustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    sustainSlider->addListener (this);
 
-    tuneSlider->setBounds (249, 50, 65, 85);
+    sustainSlider->setBounds (249, 50, 65, 85);
 
     label4.reset (new Label ("label",
                              TRANS("Sustain")));
@@ -105,14 +105,14 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
 
     label4->setBounds (249, 35, 65, 18);
 
-    levelSlider.reset (new Slider ("levelSlider"));
-    addAndMakeVisible (levelSlider.get());
-    levelSlider->setRange (0, 1, 0.01);
-    levelSlider->setSliderStyle (Slider::Rotary);
-    levelSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    levelSlider->addListener (this);
+    releaseSlider.reset (new Slider ("releaseSlider"));
+    addAndMakeVisible (releaseSlider.get());
+    releaseSlider->setRange (0, 5, 0.1);
+    releaseSlider->setSliderStyle (Slider::Rotary);
+    releaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    releaseSlider->addListener (this);
 
-    levelSlider->setBounds (335, 50, 65, 85);
+    releaseSlider->setBounds (335, 50, 65, 85);
 
     label5.reset (new Label ("label",
                              TRANS("Release")));
@@ -149,14 +149,14 @@ ADSRComponent::~ADSRComponent()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    rezLPSlider = nullptr;
+    attackSlider = nullptr;
     label2 = nullptr;
     label1 = nullptr;
-    freqLPSlider = nullptr;
+    decaySlider = nullptr;
     label3 = nullptr;
-    tuneSlider = nullptr;
+    sustainSlider = nullptr;
     label4 = nullptr;
-    levelSlider = nullptr;
+    releaseSlider = nullptr;
     label5 = nullptr;
     activateButton = nullptr;
 
@@ -191,25 +191,29 @@ void ADSRComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == rezLPSlider.get())
+    if (sliderThatWasMoved == attackSlider.get())
     {
-        //[UserSliderCode_rezLPSlider] -- add your slider handling code here..
-        //[/UserSliderCode_rezLPSlider]
+        //[UserSliderCode_attackSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(12, sliderThatWasMoved->getValue() / 5);
+        //[/UserSliderCode_attackSlider]
     }
-    else if (sliderThatWasMoved == freqLPSlider.get())
+    else if (sliderThatWasMoved == decaySlider.get())
     {
-        //[UserSliderCode_freqLPSlider] -- add your slider handling code here..
-        //[/UserSliderCode_freqLPSlider]
+        //[UserSliderCode_decaySlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(13, sliderThatWasMoved->getValue() / 2);
+        //[/UserSliderCode_decaySlider]
     }
-    else if (sliderThatWasMoved == tuneSlider.get())
+    else if (sliderThatWasMoved == sustainSlider.get())
     {
-        //[UserSliderCode_tuneSlider] -- add your slider handling code here..
-        //[/UserSliderCode_tuneSlider]
+        //[UserSliderCode_sustainSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(14, sliderThatWasMoved->getValue());
+        //[/UserSliderCode_sustainSlider]
     }
-    else if (sliderThatWasMoved == levelSlider.get())
+    else if (sliderThatWasMoved == releaseSlider.get())
     {
-        //[UserSliderCode_levelSlider] -- add your slider handling code here..
-        //[/UserSliderCode_levelSlider]
+        //[UserSliderCode_releaseSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(15, sliderThatWasMoved->getValue() / 5);
+        //[/UserSliderCode_releaseSlider]
     }
 
     //[UsersliderValueChanged_Post]
@@ -252,9 +256,9 @@ BEGIN_JUCER_METADATA
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="480"
                  initialHeight="160">
   <BACKGROUND backgroundColour="ff233d6a"/>
-  <SLIDER name="rezLPSlider" id="56f2a6e81fe5f959" memberName="rezLPSlider"
+  <SLIDER name="attackSlider" id="56f2a6e81fe5f959" memberName="attackSlider"
           virtualName="" explicitFocusOrder="0" pos="80 50 65 85" min="0.0"
-          max="1.0" int="0.01" style="Rotary" textBoxPos="TextBoxBelow"
+          max="5.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="fc4b9114d12d20a0" memberName="label2" virtualName=""
@@ -267,9 +271,9 @@ BEGIN_JUCER_METADATA
          edBkgCol="0" labelText="ADSR" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="freqLPSlider" id="bef96203430a69c3" memberName="freqLPSlider"
+  <SLIDER name="decaySlider" id="bef96203430a69c3" memberName="decaySlider"
           virtualName="" explicitFocusOrder="0" pos="165 50 65 85" min="0.0"
-          max="1.0" int="0.01" style="Rotary" textBoxPos="TextBoxBelow"
+          max="2.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""
@@ -277,9 +281,9 @@ BEGIN_JUCER_METADATA
          edBkgCol="0" labelText="Decay" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="tuneSlider" id="4f1fb4ab86f17cd7" memberName="tuneSlider"
+  <SLIDER name="sustainSlider" id="4f1fb4ab86f17cd7" memberName="sustainSlider"
           virtualName="" explicitFocusOrder="0" pos="249 50 65 85" min="0.0"
-          max="1.0" int="0.01" style="Rotary" textBoxPos="TextBoxBelow"
+          max="1.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="ebeda905bdad0cb" memberName="label4" virtualName=""
@@ -287,9 +291,9 @@ BEGIN_JUCER_METADATA
          edBkgCol="0" labelText="Sustain" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="levelSlider" id="b78d17951dec2b84" memberName="levelSlider"
+  <SLIDER name="releaseSlider" id="b78d17951dec2b84" memberName="releaseSlider"
           virtualName="" explicitFocusOrder="0" pos="335 50 65 85" min="0.0"
-          max="1.0" int="0.01" style="Rotary" textBoxPos="TextBoxBelow"
+          max="5.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="a0556e081db737b8" memberName="label5" virtualName=""

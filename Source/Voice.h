@@ -32,6 +32,8 @@ public:
         freqFilterHP = 20.0f;
         rezFilterHP = 0.0f;
 
+        setADSRSParams(1.0f, 0.8f, 0.8f, 0.1f);
+
         auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
 
@@ -56,14 +58,8 @@ public:
     //==============================================================================
     void noteStarted() override
     {
-        //auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
-        auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
-
-        float freq1 = freqHz * pow(2, octave1 + (tune1 + transp1) / 12);
-        float freq2 = freqHz * pow(2, octave2 + (tune2 + transp2) / 12);
-
-        Logger::writeToLog((String)freq1 + " " + (String)octave1 + " " + (String)transp1 + " " + (String)tune1);
-        Logger::writeToLog((String)freq2 + " " + (String)octave2 + " " + (String)transp2 + " " + (String)tune2);
+        adsr.noteOn();
+        taiOff = false;
     }
 
     //==============================================================================
@@ -81,7 +77,11 @@ public:
     //==============================================================================
     void noteStopped(bool) override
     {
-        clearCurrentNote();
+        adsr.noteOff();
+        taiOff = true;
+
+        if (velocity == 0)
+            clearCurrentNote();
     }
 
     //==============================================================================
@@ -92,35 +92,44 @@ public:
     //==============================================================================
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
-        auto block = tempBlock.getSubBlock(0, (size_t)numSamples);
+        adsr.setParameters(adsrParams);
 
-        juce::dsp::ProcessContextReplacing<float> context(block);
-        processorChain.process(context);
+        float env = adsr.getNextSample();
+        if (env == 0)
+        {
+            clearCurrentNote();
+        }
 
-        auto velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
+        Logger::writeToLog((String)adsr.getNextSample());
+
+        velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
         auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
 
         float freq1 = freqHz * pow(2, octave1 + (tune1 + transp1) / 12);
         float freq2 = freqHz * pow(2, octave2 + (tune2 + transp2) / 12);
 
         processorChain.get<osc1Index>().setFrequency(freq1, true);
-        processorChain.get<osc1Index>().setLevel(velocity * level1);
+        processorChain.get<osc1Index>().setLevel(velocity * level1 * env);
 
         processorChain.get<osc2Index>().setFrequency(freq2, true);
-        processorChain.get<osc2Index>().setLevel(velocity * level2);
+        processorChain.get<osc2Index>().setLevel(velocity * level2 * env);
 
-        auto &filterLP = processorChain.get<filterLPIndex>();
+        auto& filterLP = processorChain.get<filterLPIndex>();
         filterLP.setCutoffFrequencyHz(freqFilterLP);
         filterLP.setResonance(rezFilterLP);
 
-        auto &filterHP = processorChain.get<filterHPIndex>();
+        auto& filterHP = processorChain.get<filterHPIndex>();
         filterHP.setCutoffFrequencyHz(freqFilterHP);
         filterHP.setResonance(rezFilterHP);
+
+        auto block = tempBlock.getSubBlock(0, (size_t)numSamples);
+
+        juce::dsp::ProcessContextReplacing<float> context(block);
+        processorChain.process(context);
 
         juce::dsp::AudioBlock<float>(outputBuffer)
             .getSubBlock((size_t)startSample, (size_t)numSamples)
             .add(tempBlock);
-
         block.clear();
     }
 
@@ -152,6 +161,8 @@ public:
     }
 
 private:
+    float velocity;
+
     int octave1, octave2;
     float transp1, transp2;
     float tune1, tune2;
@@ -159,6 +170,8 @@ private:
 
     float freqFilterLP, rezFilterLP;
     float freqFilterHP, rezFilterHP;
+
+    bool taiOff;
 
     //==============================================================================
     juce::HeapBlock<char> heapBlock;
