@@ -16,12 +16,12 @@ class Voice : public juce::MPESynthesiserVoice
 public:
     Voice()
     {
-        level1 = 0.7f;
+        level1 = 0.0f;
         tune1 = 1.0f;
         octave1 = 0;
         transp1 = 0;
 
-        level2 = 0.7f;
+        level2 = 0.0f;
         tune2 = 1.0f;
         octave2 = 0;
         transp2 = 0;
@@ -31,8 +31,8 @@ public:
 
         freqFilterHP = 20.0f;
         rezFilterHP = 0.0f;
-
-        setADSRSParams(1.0f, 0.8f, 0.8f, 0.1f);
+        
+        env = 0;
 
         auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
@@ -59,7 +59,6 @@ public:
     void noteStarted() override
     {
         adsr.noteOn();
-        taiOff = false;
     }
 
     //==============================================================================
@@ -78,7 +77,6 @@ public:
     void noteStopped(bool) override
     {
         adsr.noteOff();
-        taiOff = true;
 
         if (velocity == 0)
             clearCurrentNote();
@@ -93,14 +91,6 @@ public:
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override
     {
         adsr.setParameters(adsrParams);
-
-        float env = adsr.getNextSample();
-        if (env == 0)
-        {
-            clearCurrentNote();
-        }
-
-        Logger::writeToLog((String)adsr.getNextSample());
 
         velocity = getCurrentlyPlayingNote().noteOnVelocity.asUnsignedFloat();
         auto freqHz = (float)getCurrentlyPlayingNote().getFrequencyInHertz();
@@ -131,6 +121,16 @@ public:
             .getSubBlock((size_t)startSample, (size_t)numSamples)
             .add(tempBlock);
         block.clear();
+        
+        while (--numSamples >= 0)
+        {
+            env = adsr.getNextSample();
+
+            if (env == 0)
+            {
+                clearCurrentNote();
+            }
+        }
     }
 
     void setWaveForm1(int waveForm) { processorChain.get<osc1Index>().setWaveForm(waveForm); }
@@ -161,7 +161,7 @@ public:
     }
 
 private:
-    float velocity;
+    float velocity, env;
 
     int octave1, octave2;
     float transp1, transp2;
@@ -170,8 +170,6 @@ private:
 
     float freqFilterLP, rezFilterLP;
     float freqFilterHP, rezFilterHP;
-
-    bool taiOff;
 
     //==============================================================================
     juce::HeapBlock<char> heapBlock;

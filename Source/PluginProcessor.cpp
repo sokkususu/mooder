@@ -43,10 +43,10 @@ MooderAudioProcessor::MooderAudioProcessor()
             std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.0f, 2.0f), 0.0f),
             std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.0f, 1.0f), 1.0f),
             std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.0f, 5.0f), 0.1f),
-        }), waveForm1(1), waveForm2(1), lastSampleRate(0.0)
+        }), waveForm1(1), waveForm2(1), lastSampleRate(44100.0)
 #endif
 {
-    //levelParameter = parametrs.getRawParameterValue("level");
+    
 }
 
 MooderAudioProcessor::~MooderAudioProcessor()
@@ -118,7 +118,9 @@ void MooderAudioProcessor::changeProgramName (int index, const String& newName)
 //==============================================================================
 void MooderAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    ignoreUnused(samplesPerBlock);
     lastSampleRate = sampleRate;
+    audioEngine.setCurrentPlaybackSampleRate(sampleRate);
     audioEngine.prepare ({ sampleRate, (uint32) samplesPerBlock, 2 });
     midiMessageCollector.reset (sampleRate);
 }
@@ -160,14 +162,6 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-    
-    midiMessageCollector.removeNextBlockOfMessages (midiMessages, buffer.getNumSamples());
-
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-    
-    audioEngine.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
-    scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
 
  //   for (int channel = 0; channel < totalNumInputChannels; ++channel)
 //    {
@@ -178,33 +172,43 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
     for (int i = 0; i < audioEngine.getNumVoices(); i++)
     {
-        voice = dynamic_cast<Voice*>(audioEngine.getVoice(i));
-        
-        
-        voice->setWaveForm1(waveForm1);
-        voice->setOctave1((float)*parametrs.getRawParameterValue("octave1"));
-        voice->setTranspose1((float)*parametrs.getRawParameterValue("trans1"));
-        voice->setTune1((float)*parametrs.getRawParameterValue("tune1"));
-        voice->setLevel1((float)*parametrs.getRawParameterValue("level1"));
+        if ((voice = dynamic_cast<Voice*>(audioEngine.getVoice(i))))
+        {
+            voice->setADSRSampleRate(lastSampleRate);
+            
+            voice->setWaveForm1(waveForm1);
+            voice->setOctave1((float)*parametrs.getRawParameterValue("octave1"));
+            voice->setTranspose1((float)*parametrs.getRawParameterValue("trans1"));
+            voice->setTune1((float)*parametrs.getRawParameterValue("tune1"));
+            voice->setLevel1((float)*parametrs.getRawParameterValue("level1"));
 
-        voice->setWaveForm2(waveForm2);
-        voice->setOctave2((float)*parametrs.getRawParameterValue("octave2"));
-        voice->setTranspose2((float)*parametrs.getRawParameterValue("trans2"));
-        voice->setTune2((float)*parametrs.getRawParameterValue("tune2"));
-        voice->setLevel2((float)*parametrs.getRawParameterValue("level2"));
+            voice->setWaveForm2(waveForm2);
+            voice->setOctave2((float)*parametrs.getRawParameterValue("octave2"));
+            voice->setTranspose2((float)*parametrs.getRawParameterValue("trans2"));
+            voice->setTune2((float)*parametrs.getRawParameterValue("tune2"));
+            voice->setLevel2((float)*parametrs.getRawParameterValue("level2"));
 
-        voice->setFreqFilterLP((float)*parametrs.getRawParameterValue("freqFilterLP"));
-        voice->setRezFilterLP((float)*parametrs.getRawParameterValue("rezFilterLP"));
+            voice->setFreqFilterLP((float)*parametrs.getRawParameterValue("freqFilterLP"));
+            voice->setRezFilterLP((float)*parametrs.getRawParameterValue("rezFilterLP"));
 
-        voice->setFreqFilterHP((float)*parametrs.getRawParameterValue("freqFilterHP"));
-        voice->setRezFilterHP((float)*parametrs.getRawParameterValue("rezFilterHP"));
-        
-        voice->setADSRSParams(
-            (float)*parametrs.getRawParameterValue("attack"), 
-            (float)*parametrs.getRawParameterValue("decay"), 
-            (float)*parametrs.getRawParameterValue("sustain"), 
-            (float)*parametrs.getRawParameterValue("release"));
+            voice->setFreqFilterHP((float)*parametrs.getRawParameterValue("freqFilterHP"));
+            voice->setRezFilterHP((float)*parametrs.getRawParameterValue("rezFilterHP"));
+            
+            voice->setADSRSParams(
+                (float)*parametrs.getRawParameterValue("attack"),
+                (float)*parametrs.getRawParameterValue("decay"),
+                (float)*parametrs.getRawParameterValue("sustain"),
+                (float)*parametrs.getRawParameterValue("release"));
+        }
     }
+    
+    midiMessageCollector.removeNextBlockOfMessages (midiMessages, buffer.getNumSamples());
+
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear (i, 0, buffer.getNumSamples());
+    
+    audioEngine.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    scopeDataCollector.process(buffer.getReadPointer(0), (size_t)buffer.getNumSamples());
     
     midiMessages.clear();
 }

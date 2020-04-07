@@ -141,6 +141,10 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
 
 
     //[Constructor] You can add your own custom stuff here..
+    attackSlider->setValue(0.1);
+    decaySlider->setValue(0.0);
+    sustainSlider->setValue(1.0);
+    releaseSlider->setValue(0.1);
     //[/Constructor]
 }
 
