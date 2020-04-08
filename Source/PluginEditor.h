@@ -20,6 +20,7 @@
 #pragma once
 
 //[Headers]     -- You can add your own extra header files here --
+#include "OtherLookAndFeel.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 #include "ScopeComponent.h"
@@ -63,6 +64,8 @@ private:
     MidiKeyboardComponent midiKeyboardComponent{midiKeyboardState,
                                                 MidiKeyboardComponent::horizontalKeyboard};
     ScopeComponent<float> scopeComponent;
+
+    OtherLookAndFeel otherLookAndFeel;
     //[/UserVariables]
 
     //==============================================================================

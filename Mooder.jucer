@@ -35,6 +35,8 @@
       <FILE id="WGkJsY" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
     </GROUP>
     <GROUP id="{65BE3360-6B46-1F33-EC3D-BFEAF146437D}" name="Source">
+      <FILE id="hxHGlZ" name="OtherLookAndFeel.h" compile="0" resource="0"
+            file="Source/OtherLookAndFeel.h"/>
       <FILE id="gKcCf9" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="T6cbUz" name="PluginProcessor.h" compile="0" resource="0"

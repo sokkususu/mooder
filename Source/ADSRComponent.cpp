@@ -41,7 +41,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     attackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     attackSlider->addListener (this);
 
-    attackSlider->setBounds (80, 50, 65, 85);
+    attackSlider->setBounds (80, 223, 65, 85);
 
     label2.reset (new Label ("label",
                              TRANS("Attack")));
@@ -52,7 +52,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label2->setBounds (80, 35, 65, 18);
+    label2->setBounds (80, 208, 65, 18);
 
     label1.reset (new Label ("label",
                              TRANS("ADSR")));
@@ -72,7 +72,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     decaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     decaySlider->addListener (this);
 
-    decaySlider->setBounds (165, 50, 65, 85);
+    decaySlider->setBounds (165, 223, 65, 85);
 
     label3.reset (new Label ("label",
                              TRANS("Decay")));
@@ -83,7 +83,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label3->setBounds (165, 35, 65, 18);
+    label3->setBounds (165, 208, 65, 18);
 
     sustainSlider.reset (new Slider ("sustainSlider"));
     addAndMakeVisible (sustainSlider.get());
@@ -92,7 +92,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     sustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     sustainSlider->addListener (this);
 
-    sustainSlider->setBounds (249, 50, 65, 85);
+    sustainSlider->setBounds (249, 223, 65, 85);
 
     label4.reset (new Label ("label",
                              TRANS("Sustain")));
@@ -103,7 +103,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     label4->setColour (TextEditor::textColourId, Colours::black);
     label4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label4->setBounds (249, 35, 65, 18);
+    label4->setBounds (249, 208, 65, 18);
 
     releaseSlider.reset (new Slider ("releaseSlider"));
     addAndMakeVisible (releaseSlider.get());
@@ -112,7 +112,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     releaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     releaseSlider->addListener (this);
 
-    releaseSlider->setBounds (335, 50, 65, 85);
+    releaseSlider->setBounds (335, 223, 65, 85);
 
     label5.reset (new Label ("label",
                              TRANS("Release")));
@@ -123,7 +123,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     label5->setColour (TextEditor::textColourId, Colours::black);
     label5->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label5->setBounds (335, 35, 65, 18);
+    label5->setBounds (335, 208, 65, 18);
 
     activateButton.reset (new ToggleButton ("activateButton"));
     addAndMakeVisible (activateButton.get());
@@ -137,7 +137,7 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (480, 160);
+    setSize (480, 320);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -258,15 +258,15 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="480"
-                 initialHeight="160">
+                 initialHeight="320">
   <BACKGROUND backgroundColour="ff233d6a"/>
   <SLIDER name="attackSlider" id="56f2a6e81fe5f959" memberName="attackSlider"
-          virtualName="" explicitFocusOrder="0" pos="80 50 65 85" min="0.0"
+          virtualName="" explicitFocusOrder="0" pos="80 223 65 85" min="0.0"
           max="5.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="fc4b9114d12d20a0" memberName="label2" virtualName=""
-         explicitFocusOrder="0" pos="80 35 65 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="80 208 65 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Attack" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
@@ -276,32 +276,32 @@ BEGIN_JUCER_METADATA
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="decaySlider" id="bef96203430a69c3" memberName="decaySlider"
-          virtualName="" explicitFocusOrder="0" pos="165 50 65 85" min="0.0"
+          virtualName="" explicitFocusOrder="0" pos="165 223 65 85" min="0.0"
           max="2.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""
-         explicitFocusOrder="0" pos="165 35 65 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="165 208 65 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Decay" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="sustainSlider" id="4f1fb4ab86f17cd7" memberName="sustainSlider"
-          virtualName="" explicitFocusOrder="0" pos="249 50 65 85" min="0.0"
+          virtualName="" explicitFocusOrder="0" pos="249 223 65 85" min="0.0"
           max="1.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="ebeda905bdad0cb" memberName="label4" virtualName=""
-         explicitFocusOrder="0" pos="249 35 65 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="249 208 65 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Sustain" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="releaseSlider" id="b78d17951dec2b84" memberName="releaseSlider"
-          virtualName="" explicitFocusOrder="0" pos="335 50 65 85" min="0.0"
+          virtualName="" explicitFocusOrder="0" pos="335 223 65 85" min="0.0"
           max="5.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="a0556e081db737b8" memberName="label5" virtualName=""
-         explicitFocusOrder="0" pos="335 35 65 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="335 208 65 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Release" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>

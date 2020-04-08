@@ -163,13 +163,6 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
- //   for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-//    }
-
     for (int i = 0; i < audioEngine.getNumVoices(); i++)
     {
         if ((voice = dynamic_cast<Voice*>(audioEngine.getVoice(i))))

@@ -32,31 +32,33 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     : AudioProcessorEditor (&p), processor (p), scopeComponent(processor.getAudioBufferQueue())
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    setLookAndFeel(&otherLookAndFeel);
+
     addAndMakeVisible(midiKeyboardComponent);
     addAndMakeVisible(scopeComponent);
     //[/Constructor_pre]
 
     component.reset (new OscillatorComponent (p));
     addAndMakeVisible (component.get());
-    component->setBounds (0, 0, 480, 160);
+    component->setBounds (7, 7, 466, 144);
 
     component2.reset (new Oscillator2Component (p));
     addAndMakeVisible (component2.get());
-    component2->setBounds (0, 160, 480, 160);
+    component2->setBounds (7, 160, 466, 144);
 
     component3.reset (new FilterComponent (p));
     addAndMakeVisible (component3.get());
-    component3->setBounds (480, 0, 480, 160);
+    component3->setBounds (480, 0, 480, 320);
 
     component4.reset (new ADSRComponent (p));
     addAndMakeVisible (component4.get());
-    component4->setBounds (480, 160, 480, 160);
+    component4->setBounds (960, 0, 480, 320);
 
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (960, 420);
+    setSize (1440, 420);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -81,6 +83,7 @@ MooderAudioProcessorEditor::~MooderAudioProcessorEditor()
 
     //[Destructor]. You can add your own custom destruction code here..
     midiKeyboardState.removeListener(&processor.getMidiMessageCollector());
+    setLookAndFeel(nullptr);
     //[/Destructor]
 }
 
@@ -90,7 +93,7 @@ void MooderAudioProcessorEditor::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::cornflowerblue);
+    g.fillAll (Colour (0xff191c23));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -124,19 +127,19 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor"
                  constructorParams="MooderAudioProcessor &amp;p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p), scopeComponent(processor.getAudioBufferQueue())"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="960" initialHeight="420">
-  <BACKGROUND backgroundColour="ff6495ed"/>
+                 fixedSize="1" initialWidth="1440" initialHeight="420">
+  <BACKGROUND backgroundColour="ff191c23"/>
   <JUCERCOMP name="" id="74dc897685dd5775" memberName="component" virtualName=""
-             explicitFocusOrder="0" pos="0 0 480 160" sourceFile="OscillatorComponent.cpp"
+             explicitFocusOrder="0" pos="7 7 466 144" sourceFile="OscillatorComponent.cpp"
              constructorParams="p"/>
   <JUCERCOMP name="" id="90a5c6d12f7447c2" memberName="component2" virtualName=""
-             explicitFocusOrder="0" pos="0 160 480 160" sourceFile="Oscillator2Component.cpp"
+             explicitFocusOrder="0" pos="7 160 466 144" sourceFile="Oscillator2Component.cpp"
              constructorParams="p"/>
   <JUCERCOMP name="" id="2f6bdedfd7ffb8a4" memberName="component3" virtualName=""
-             explicitFocusOrder="0" pos="480 0 480 160" sourceFile="FilterComponent.cpp"
+             explicitFocusOrder="0" pos="480 0 480 320" sourceFile="FilterComponent.cpp"
              constructorParams="p"/>
   <JUCERCOMP name="" id="4b9d246e4d617cb8" memberName="component4" virtualName=""
-             explicitFocusOrder="0" pos="480 160 480 160" sourceFile="ADSRComponent.cpp"
+             explicitFocusOrder="0" pos="960 0 480 320" sourceFile="ADSRComponent.cpp"
              constructorParams="p"/>
 </JUCER_COMPONENT>
 
