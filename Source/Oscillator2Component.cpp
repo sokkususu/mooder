@@ -215,7 +215,7 @@ void Oscillator2Component::paint (Graphics& g)
     //[/UserPrePaint]
 
     {
-        float x = 0.0f, y = 0.0f, width = 466.0f, height = 146.0f;
+        float x = 0.0f, y = 0.0f, width = 466.0f, height = 144.0f;
         Colour fillColour = Colour (0xff373e46);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
@@ -323,7 +323,7 @@ BEGIN_JUCER_METADATA
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="466"
                  initialHeight="144">
   <BACKGROUND backgroundColour="465f59">
-    <ROUNDRECT pos="0 0 466 146" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
+    <ROUNDRECT pos="0 0 466 144" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
   </BACKGROUND>
   <SLIDER name="octaveSlider" id="56f2a6e81fe5f959" memberName="octaveSlider"
           virtualName="" explicitFocusOrder="0" pos="113 48 55 85" textboxtext="ffdedede"

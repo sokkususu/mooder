@@ -39,12 +39,13 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     rezLPSlider->setRange (0, 100, 1);
     rezLPSlider->setSliderStyle (Slider::Rotary);
     rezLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    rezLPSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     rezLPSlider->addListener (this);
 
-    rezLPSlider->setBounds (80, 223, 65, 85);
+    rezLPSlider->setBounds (78, 200, 55, 85);
 
     label2.reset (new Label ("label",
-                             TRANS("res")));
+                             TRANS("Res")));
     addAndMakeVisible (label2.get());
     label2->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
     label2->setJustificationType (Justification::centred);
@@ -52,7 +53,7 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label2->setBounds (80, 208, 65, 18);
+    label2->setBounds (78, 178, 55, 18);
 
     label1.reset (new Label ("label",
                              TRANS("Filter")));
@@ -63,19 +64,20 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label1->setColour (TextEditor::textColourId, Colours::black);
     label1->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label1->setBounds (215, 3, 50, 18);
+    label1->setBounds (212, 3, 50, 18);
 
     freqLPSlider.reset (new Slider ("freqLPSlider"));
     addAndMakeVisible (freqLPSlider.get());
     freqLPSlider->setRange (20, 6000, 1);
     freqLPSlider->setSliderStyle (Slider::Rotary);
     freqLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    freqLPSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     freqLPSlider->addListener (this);
 
-    freqLPSlider->setBounds (165, 223, 65, 85);
+    freqLPSlider->setBounds (163, 200, 55, 85);
 
     label3.reset (new Label ("label",
-                             TRANS("freq")));
+                             TRANS("Freq")));
     addAndMakeVisible (label3.get());
     label3->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
     label3->setJustificationType (Justification::centred);
@@ -83,19 +85,20 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label3->setBounds (165, 208, 65, 18);
+    label3->setBounds (163, 178, 55, 18);
 
     tuneSlider.reset (new Slider ("tuneSlider"));
     addAndMakeVisible (tuneSlider.get());
     tuneSlider->setRange (20, 2000, 1);
     tuneSlider->setSliderStyle (Slider::Rotary);
     tuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    tuneSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     tuneSlider->addListener (this);
 
-    tuneSlider->setBounds (249, 223, 65, 85);
+    tuneSlider->setBounds (247, 200, 55, 85);
 
     label4.reset (new Label ("label",
-                             TRANS("freq")));
+                             TRANS("Freq")));
     addAndMakeVisible (label4.get());
     label4->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
     label4->setJustificationType (Justification::centred);
@@ -103,19 +106,20 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label4->setColour (TextEditor::textColourId, Colours::black);
     label4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label4->setBounds (249, 208, 65, 18);
+    label4->setBounds (247, 178, 55, 18);
 
     levelSlider.reset (new Slider ("levelSlider"));
     addAndMakeVisible (levelSlider.get());
     levelSlider->setRange (0, 100, 1);
     levelSlider->setSliderStyle (Slider::Rotary);
     levelSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    levelSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     levelSlider->addListener (this);
 
-    levelSlider->setBounds (335, 223, 65, 85);
+    levelSlider->setBounds (333, 200, 55, 85);
 
     label5.reset (new Label ("label",
-                             TRANS("res")));
+                             TRANS("Res")));
     addAndMakeVisible (label5.get());
     label5->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
     label5->setJustificationType (Justification::centred);
@@ -123,21 +127,13 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label5->setColour (TextEditor::textColourId, Colours::black);
     label5->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label5->setBounds (335, 208, 65, 18);
-
-    activateButton.reset (new ToggleButton ("activateButton"));
-    addAndMakeVisible (activateButton.get());
-    activateButton->setButtonText (String());
-    activateButton->addListener (this);
-    activateButton->setToggleState (true, dontSendNotification);
-
-    activateButton->setBounds (456, 0, 24, 24);
+    label5->setBounds (333, 178, 55, 18);
 
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (480, 320);
+    setSize (466, 295);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -159,7 +155,6 @@ FilterComponent::~FilterComponent()
     label4 = nullptr;
     levelSlider = nullptr;
     label5 = nullptr;
-    activateButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -172,7 +167,23 @@ void FilterComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff43786c));
+    {
+        float x = 0.0f, y = 0.0f, width = 466.0f, height = 295.0f;
+        Colour fillColour = Colour (0xff373e46);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
+
+    {
+        float x = 25.0f, y = 24.0f, width = 415.0f, height = 144.0f;
+        Colour fillColour = Colour (0xff191c23);
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.fillRoundedRectangle (x, y, width, height, 10.000f);
+    }
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -221,21 +232,6 @@ void FilterComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     //[/UsersliderValueChanged_Post]
 }
 
-void FilterComponent::buttonClicked (Button* buttonThatWasClicked)
-{
-    //[UserbuttonClicked_Pre]
-    //[/UserbuttonClicked_Pre]
-
-    if (buttonThatWasClicked == activateButton.get())
-    {
-        //[UserButtonCode_activateButton] -- add your button handler code here..
-        //[/UserButtonCode_activateButton]
-    }
-
-    //[UserbuttonClicked_Post]
-    //[/UserbuttonClicked_Post]
-}
-
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
@@ -254,57 +250,58 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="FilterComponent" componentName=""
                  parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
-                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="480"
-                 initialHeight="320">
-  <BACKGROUND backgroundColour="ff43786c"/>
+                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="466"
+                 initialHeight="295">
+  <BACKGROUND backgroundColour="43786c">
+    <ROUNDRECT pos="0 0 466 295" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
+    <ROUNDRECT pos="25 24 415 144" cornerSize="10.0" fill="solid: ff191c23"
+               hasStroke="0"/>
+  </BACKGROUND>
   <SLIDER name="rezLPSlider" id="56f2a6e81fe5f959" memberName="rezLPSlider"
-          virtualName="" explicitFocusOrder="0" pos="80 223 65 85" min="0.0"
-          max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          virtualName="" explicitFocusOrder="0" pos="78 200 55 85" textboxoutline="8e989b"
+          min="0.0" max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="fc4b9114d12d20a0" memberName="label2" virtualName=""
-         explicitFocusOrder="0" pos="80 208 65 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="res" editableSingleClick="0" editableDoubleClick="0"
+         explicitFocusOrder="0" pos="78 178 55 18" edTextCol="ff000000"
+         edBkgCol="0" labelText="Res" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <LABEL name="label" id="a12fe4645558f25c" memberName="label1" virtualName=""
-         explicitFocusOrder="0" pos="215 3 50 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="212 3 50 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Filter" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="freqLPSlider" id="bef96203430a69c3" memberName="freqLPSlider"
-          virtualName="" explicitFocusOrder="0" pos="165 223 65 85" min="20.0"
-          max="6000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          virtualName="" explicitFocusOrder="0" pos="163 200 55 85" textboxoutline="8e989b"
+          min="20.0" max="6000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""
-         explicitFocusOrder="0" pos="165 208 65 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="freq" editableSingleClick="0" editableDoubleClick="0"
+         explicitFocusOrder="0" pos="163 178 55 18" edTextCol="ff000000"
+         edBkgCol="0" labelText="Freq" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="tuneSlider" id="4f1fb4ab86f17cd7" memberName="tuneSlider"
-          virtualName="" explicitFocusOrder="0" pos="249 223 65 85" min="20.0"
-          max="2000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          virtualName="" explicitFocusOrder="0" pos="247 200 55 85" textboxoutline="8e989b"
+          min="20.0" max="2000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="ebeda905bdad0cb" memberName="label4" virtualName=""
-         explicitFocusOrder="0" pos="249 208 65 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="freq" editableSingleClick="0" editableDoubleClick="0"
+         explicitFocusOrder="0" pos="247 178 55 18" edTextCol="ff000000"
+         edBkgCol="0" labelText="Freq" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="levelSlider" id="b78d17951dec2b84" memberName="levelSlider"
-          virtualName="" explicitFocusOrder="0" pos="335 223 65 85" min="0.0"
-          max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          virtualName="" explicitFocusOrder="0" pos="333 200 55 85" textboxoutline="8e989b"
+          min="0.0" max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="a0556e081db737b8" memberName="label5" virtualName=""
-         explicitFocusOrder="0" pos="335 208 65 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="res" editableSingleClick="0" editableDoubleClick="0"
+         explicitFocusOrder="0" pos="333 178 55 18" edTextCol="ff000000"
+         edBkgCol="0" labelText="Res" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <TOGGLEBUTTON name="activateButton" id="cf4fb079af3e6ec6" memberName="activateButton"
-                virtualName="" explicitFocusOrder="0" pos="456 0 24 24" buttonText=""
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

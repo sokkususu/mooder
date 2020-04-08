@@ -34,8 +34,7 @@
                                                                     //[/Comments]
 */
 class FilterComponent  : public Component,
-                         public Slider::Listener,
-                         public Button::Listener
+                         public Slider::Listener
 {
 public:
     //==============================================================================
@@ -49,7 +48,6 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
@@ -68,7 +66,6 @@ private:
     std::unique_ptr<Label> label4;
     std::unique_ptr<Slider> levelSlider;
     std::unique_ptr<Label> label5;
-    std::unique_ptr<ToggleButton> activateButton;
 
 
     //==============================================================================
