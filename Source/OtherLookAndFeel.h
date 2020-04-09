@@ -56,7 +56,6 @@ public:
     {
         auto width = button.getWidth();
         auto height = button.getHeight();
-        auto buttonArea = button.getLocalBounds();
 
         g.setColour(Colour(0xff68707B));
         g.fillRoundedRectangle(0, 0, width, height, 11);
@@ -73,32 +72,4 @@ public:
             g.fillRoundedRectangle(0, 0, width, height, 11);
         }
     }
-
-
-    /*
-    void drawButtonText (Graphics& g, TextButton& button, bool, bool isButtonDown) override
-    {
-        auto font = getTextButtonFont (button, button.getHeight());
-        g.setFont (font);
-        g.setColour (button.findColour (button.getToggleState() ? TextButton::textColourOnId
-                                                                : TextButton::textColourOffId)
-                           .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.5f));
-
-        auto yIndent = jmin (4, button.proportionOfHeight (0.3f));
-        auto cornerSize = jmin (button.getHeight(), button.getWidth()) / 2;
-
-        auto fontHeight = roundToInt (font.getHeight() * 0.6f);
-        auto leftIndent  = jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnLeft()  ? 4 : 2));
-        auto rightIndent = jmin (fontHeight, 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2));
-        auto textWidth = button.getWidth() - leftIndent - rightIndent;
-
-        auto edge = 4;
-        auto offset = isButtonDown ? edge / 2 : 0;
-
-        if (textWidth > 0)
-            g.drawFittedText (button.getButtonText(),
-                              leftIndent + offset, yIndent + offset, textWidth, button.getHeight() - yIndent * 2 - edge,
-                              Justification::centred, 2);
-    }
-    */
 };

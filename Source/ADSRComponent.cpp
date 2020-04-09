@@ -195,9 +195,10 @@ void ADSRComponent::paint (Graphics& g)
         Colour lineColour = Colours::green;
         
         g.setColour(lineColour);
-        g.drawLine(x, y + height * attack, x+width, y + height * attack);
+        g.drawLine(x, y + height * attack,
+                x+width, y + height * attack);
         
-        Logger::writeToLog((String)attack);
+        
     }
     //[/UserPaint]
 }
