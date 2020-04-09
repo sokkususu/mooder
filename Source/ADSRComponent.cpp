@@ -141,6 +141,11 @@ ADSRComponent::ADSRComponent (MooderAudioProcessor& p)
     decaySlider->setValue(0.0);
     sustainSlider->setValue(1.0);
     releaseSlider->setValue(0.1);
+
+    lastAttack = 0.0f;
+    lastDecay = 0.0f;
+    lastSustain = 0.0f;
+    lastRelease = 0.0f;
     //[/Constructor]
 }
 
@@ -191,14 +196,59 @@ void ADSRComponent::paint (Graphics& g)
     //[UserPaint] Add your own custom painting code here..
     {
         float x = 25.0f, y = 24.0f, width = 415.0f, height = 144.0f;
-        float attack = attackSlider->getValue() / 5;
-        Colour lineColour = Colours::green;
-        
+
+        float attack = attackSlider->getValue();
+        float decay = decaySlider->getValue();
+        float sustain = sustainSlider->getValue();
+        float release = releaseSlider->getValue();
+
+        float startAX = x + 12.0f;
+        float startAY = y + height;
+        float endAX = startAX + 23 * attack;
+        float endAY = y;
+
+        float startDX = endAX;
+        float startDY = endAY;
+        float endDX = startDX + 23 * decay;
+        float endDY = y + height - height * sustain;
+
+        float startSX = endDX;
+        float startSY = endDY;
+        float endSX = startSX + 23 * 5;
+        float endSY = endDY;
+
+        float startRX = endSX;
+        float startRY = endSY;
+        float endRX = startRX + 23 * release;
+        float endRY = y + height;
+
+        Colour lineColour = Colour(0xff9471E8);
+        Colour dotColour = Colours::white;
+
         g.setColour(lineColour);
-        g.drawLine(x, y + height * attack,
-                x+width, y + height * attack);
-        
-        
+        g.drawLine(startAX, startAY, endAX, endAY, 3);
+        g.drawLine(startDX, startDY, endDX, endDY, 3);
+        g.drawLine(startSX, startSY, endSX, endSY, 3);
+        g.drawLine(startRX, startRY, endRX, endRY, 3);
+
+        float d = 8;
+        g.setColour(dotColour);
+        g.fillEllipse(startAX - d / 2, startAY - d / 2, d, d);
+        g.fillEllipse(startDX - d / 2, startDY - d / 2, d, d);
+        g.fillEllipse(startSX - d / 2, startSY - d / 2, d, d);
+        g.fillEllipse(startRX - d / 2, startRY - d / 2, d, d);
+        g.fillEllipse(endRX - d / 2, endRY - d / 2, d, d);
+
+        if (lastAttack != attack || lastDecay != decay || 
+            lastSustain != sustain || lastRelease != release) 
+        {
+            repaint();
+        }
+
+        lastAttack = attack;
+        lastDecay = decay;
+        lastSustain = sustain;
+        lastRelease = release;
     }
     //[/UserPaint]
 }

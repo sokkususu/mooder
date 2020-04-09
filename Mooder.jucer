@@ -9,6 +9,7 @@
       <FILE id="FWrGyo" name="ADSRComponent.cpp" compile="1" resource="0"
             file="Source/ADSRComponent.cpp"/>
       <FILE id="k6pEXJ" name="ADSRComponent.h" compile="0" resource="0" file="Source/ADSRComponent.h"/>
+      <FILE id="bL2Mdz" name="ADSRScope.h" compile="0" resource="0" file="Source/ADSRScope.h"/>
       <FILE id="hDTmTi" name="FilterComponent.cpp" compile="1" resource="0"
             file="Source/FilterComponent.cpp"/>
       <FILE id="TuRwfQ" name="FilterComponent.h" compile="0" resource="0"
