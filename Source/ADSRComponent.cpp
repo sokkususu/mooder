@@ -239,8 +239,8 @@ void ADSRComponent::paint (Graphics& g)
         g.fillEllipse(startRX - d / 2, startRY - d / 2, d, d);
         g.fillEllipse(endRX - d / 2, endRY - d / 2, d, d);
 
-        if (lastAttack != attack || lastDecay != decay || 
-            lastSustain != sustain || lastRelease != release) 
+        if (lastAttack != attack || lastDecay != decay ||
+            lastSustain != sustain || lastRelease != release)
         {
             repaint();
         }

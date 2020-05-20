@@ -31,8 +31,12 @@ public:
 
         freqFilterHP = 20.0f;
         rezFilterHP = 0.0f;
-        
+
         env = 0;
+        velocity = 0;
+
+        freqLFO = 3.0f;
+        amountLFO = 1.0f;
 
         auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
@@ -46,6 +50,9 @@ public:
         filterHP.setCutoffFrequencyHz(freqFilterHP);
         filterHP.setResonance(rezFilterHP);
         filterHP.setMode(juce::dsp::LadderFilter<float>::Mode::HPF24);
+
+        lfo.initialise([](float x) { return std::sin(x); }, 128);
+        lfo.setFrequency(freqLFO);
     }
 
     //==============================================================================
@@ -53,6 +60,8 @@ public:
     {
         tempBlock = juce::dsp::AudioBlock<float>(heapBlock, spec.numChannels, spec.maximumBlockSize);
         processorChain.prepare(spec);
+
+        lfo.prepare({ spec.sampleRate / lfoUpdateRate, spec.maximumBlockSize, spec.numChannels });
     }
 
     //==============================================================================
@@ -112,6 +121,24 @@ public:
         filterHP.setCutoffFrequencyHz(freqFilterHP);
         filterHP.setResonance(rezFilterHP);
 
+        lfo.setFrequency(freqLFO);
+
+        for (size_t pos = 0; pos < (size_t)numSamples;)
+        {
+            auto max = jmin((size_t)numSamples - pos, lfoUpdateCounter);
+
+            pos += max;
+            lfoUpdateCounter -= max;
+
+            if (lfoUpdateCounter == 0)
+            {
+                lfoUpdateCounter = lfoUpdateRate;
+                auto lfoOut = lfo.processSample(0.0f);
+                auto lfoMod = jmap(lfoOut, -1.0f, 1.0f, 0.5f - amountLFO / 2, 0.5f + amountLFO / 2);
+                processorChain.get<osc2Index>().setLevel(velocity * level2 * env * lfoMod);
+            }
+        }
+
         auto block = tempBlock.getSubBlock(0, (size_t)numSamples);
 
         juce::dsp::ProcessContextReplacing<float> context(block);
@@ -160,6 +187,8 @@ public:
         adsrParams.release = release;
     }
 
+    void setLFOFreq(float freq) {  }
+
 private:
     float velocity, env;
 
@@ -170,6 +199,9 @@ private:
 
     float freqFilterLP, rezFilterLP;
     float freqFilterHP, rezFilterHP;
+
+    float freqLFO;
+    float amountLFO;
 
     //==============================================================================
     juce::HeapBlock<char> heapBlock;
@@ -194,4 +226,8 @@ private:
         juce::dsp::LadderFilter<float>,
         juce::dsp::Gain<float>>
         processorChain;
+
+    static constexpr size_t lfoUpdateRate = 100;
+    size_t lfoUpdateCounter = lfoUpdateRate;
+    juce::dsp::Oscillator<float> lfo;
 };

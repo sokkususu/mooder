@@ -52,21 +52,25 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
 
     component4.reset (new ADSRComponent (p));
     addAndMakeVisible (component4.get());
-    component4->setBounds (953, 7, 466, 295);
+    component4->setBounds (7, 309, 466, 295);
+
+    component5.reset (new LFOComponent());
+    addAndMakeVisible (component5.get());
+    component5->setBounds (480, 309, 466, 295);
 
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (1426, 420);
+    setSize (953, 710);
 
 
     //[Constructor] You can add your own custom stuff here..
 
     midiKeyboardState.addListener(&processor.getMidiMessageCollector());
-    midiKeyboardComponent.setBounds(0, 320, 480, 100);
+    midiKeyboardComponent.setBounds(0, 610, 480, 100);
 
-    scopeComponent.setBounds(480, 320, 480, 100);
+    scopeComponent.setBounds(480, 610, 480, 100);
     //[/Constructor]
 }
 
@@ -79,6 +83,7 @@ MooderAudioProcessorEditor::~MooderAudioProcessorEditor()
     component2 = nullptr;
     component3 = nullptr;
     component4 = nullptr;
+    component5 = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -127,7 +132,7 @@ BEGIN_JUCER_METADATA
                  componentName="" parentClasses="public AudioProcessorEditor"
                  constructorParams="MooderAudioProcessor &amp;p" variableInitialisers="AudioProcessorEditor (&amp;p), processor (p), scopeComponent(processor.getAudioBufferQueue())"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="1426" initialHeight="420">
+                 fixedSize="1" initialWidth="953" initialHeight="710">
   <BACKGROUND backgroundColour="ff191c23"/>
   <JUCERCOMP name="" id="74dc897685dd5775" memberName="component" virtualName=""
              explicitFocusOrder="0" pos="7 7 466 144" sourceFile="OscillatorComponent.cpp"
@@ -139,8 +144,11 @@ BEGIN_JUCER_METADATA
              explicitFocusOrder="0" pos="480 7 466 295" sourceFile="FilterComponent.cpp"
              constructorParams="p"/>
   <JUCERCOMP name="" id="4b9d246e4d617cb8" memberName="component4" virtualName=""
-             explicitFocusOrder="0" pos="953 7 466 295" sourceFile="ADSRComponent.cpp"
+             explicitFocusOrder="0" pos="7 309 466 295" sourceFile="ADSRComponent.cpp"
              constructorParams="p"/>
+  <JUCERCOMP name="" id="ce37b3820bdb183d" memberName="component5" virtualName=""
+             explicitFocusOrder="0" pos="480 309 466 295" sourceFile="LFOComponent.cpp"
+             constructorParams=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
