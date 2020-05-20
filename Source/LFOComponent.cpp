@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "PluginProcessor.h"
 //[/Headers]
 
 #include "LFOComponent.h"
@@ -27,7 +28,8 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-LFOComponent::LFOComponent ()
+LFOComponent::LFOComponent (MooderAudioProcessor& p)
+    : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
@@ -45,7 +47,7 @@ LFOComponent::LFOComponent ()
 
     rateSlider.reset (new Slider ("rateSlider"));
     addAndMakeVisible (rateSlider.get());
-    rateSlider->setRange (0, 2, 0.1);
+    rateSlider->setRange (0, 10, 0.1);
     rateSlider->setSliderStyle (Slider::Rotary);
     rateSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     rateSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
@@ -93,6 +95,7 @@ LFOComponent::LFOComponent ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    rateSlider->setValue(3);
     //[/Constructor]
 }
 
@@ -157,11 +160,13 @@ void LFOComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == rateSlider.get())
     {
         //[UserSliderCode_rateSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(16, sliderThatWasMoved->getValue() / 10);
         //[/UserSliderCode_rateSlider]
     }
     else if (sliderThatWasMoved == amountSlider.get())
     {
         //[UserSliderCode_amountSlider] -- add your slider handling code here..
+        processor.setParameterNotifyingHost(17, sliderThatWasMoved->getValue());
         //[/UserSliderCode_amountSlider]
     }
 
@@ -185,9 +190,10 @@ void LFOComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="LFOComponent" componentName=""
-                 parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="466" initialHeight="295">
+                 parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
+                 variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="466"
+                 initialHeight="295">
   <BACKGROUND backgroundColour="323e44">
     <ROUNDRECT pos="0 0 466 295" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
     <ROUNDRECT pos="25 24 415 144" cornerSize="10.0" fill="solid: ff191c23"
@@ -200,7 +206,7 @@ BEGIN_JUCER_METADATA
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="rateSlider" id="bef96203430a69c3" memberName="rateSlider"
           virtualName="" explicitFocusOrder="0" pos="163 200 55 85" textboxoutline="8e989b"
-          min="0.0" max="2.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
+          min="0.0" max="10.0" int="0.1" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""

@@ -38,7 +38,7 @@ class LFOComponent  : public Component,
 {
 public:
     //==============================================================================
-    LFOComponent ();
+    LFOComponent (MooderAudioProcessor& p);
     ~LFOComponent() override;
 
     //==============================================================================
@@ -53,6 +53,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    MooderAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================

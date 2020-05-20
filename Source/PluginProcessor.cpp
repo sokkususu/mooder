@@ -43,6 +43,10 @@ MooderAudioProcessor::MooderAudioProcessor()
             std::make_unique<AudioParameterFloat>("decay", "Decay", NormalisableRange<float>(0.0f, 2.0f), 0.0f),
             std::make_unique<AudioParameterFloat>("sustain", "Sustain", NormalisableRange<float>(0.0f, 1.0f), 1.0f),
             std::make_unique<AudioParameterFloat>("release", "Release", NormalisableRange<float>(0.0f, 5.0f), 0.1f),
+
+            std::make_unique<AudioParameterFloat>("freqLFO", "FreqLFO", NormalisableRange<float>(0.0f, 10.0f), 3.0f),
+            std::make_unique<AudioParameterFloat>("amountLFO", "AmountLFO", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
+
         }), waveForm1(1), waveForm2(1), lastSampleRate(44100.0)
 #endif
 {
@@ -192,6 +196,9 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
                 (float)*parametrs.getRawParameterValue("decay"),
                 (float)*parametrs.getRawParameterValue("sustain"),
                 (float)*parametrs.getRawParameterValue("release"));
+
+            voice->setLFOFreq((float)*parametrs.getRawParameterValue("freqLFO"));
+            voice->setLFOAmount((float)*parametrs.getRawParameterValue("amountLFO"));
         }
     }
     

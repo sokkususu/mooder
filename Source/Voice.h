@@ -36,7 +36,7 @@ public:
         velocity = 0;
 
         freqLFO = 3.0f;
-        amountLFO = 1.0f;
+        amountLFO = 0.0f;
 
         auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
@@ -187,7 +187,8 @@ public:
         adsrParams.release = release;
     }
 
-    void setLFOFreq(float freq) {  }
+    void setLFOFreq(float freq) { freqLFO = freq; }
+    void setLFOAmount(float amount) { amountLFO = amount; }
 
 private:
     float velocity, env;

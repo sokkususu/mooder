@@ -54,7 +54,7 @@ MooderAudioProcessorEditor::MooderAudioProcessorEditor (MooderAudioProcessor &p)
     addAndMakeVisible (component4.get());
     component4->setBounds (7, 309, 466, 295);
 
-    component5.reset (new LFOComponent());
+    component5.reset (new LFOComponent (p));
     addAndMakeVisible (component5.get());
     component5->setBounds (480, 309, 466, 295);
 
@@ -148,7 +148,7 @@ BEGIN_JUCER_METADATA
              constructorParams="p"/>
   <JUCERCOMP name="" id="ce37b3820bdb183d" memberName="component5" virtualName=""
              explicitFocusOrder="0" pos="480 309 466 295" sourceFile="LFOComponent.cpp"
-             constructorParams=""/>
+             constructorParams="p"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
