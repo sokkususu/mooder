@@ -87,6 +87,10 @@ LFOComponent::LFOComponent (MooderAudioProcessor& p)
 
     label4->setBounds (247, 178, 55, 18);
 
+    component.reset (new LFOGraph());
+    addAndMakeVisible (component.get());
+    component->setBounds (25, 24, 415, 144);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -109,6 +113,7 @@ LFOComponent::~LFOComponent()
     label3 = nullptr;
     amountSlider = nullptr;
     label4 = nullptr;
+    component = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -124,15 +129,6 @@ void LFOComponent::paint (Graphics& g)
     {
         float x = 0.0f, y = 0.0f, width = 466.0f, height = 295.0f;
         Colour fillColour = Colour (0xff373e46);
-        //[UserPaintCustomArguments] Customize the painting arguments here..
-        //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
-    }
-
-    {
-        float x = 25.0f, y = 24.0f, width = 415.0f, height = 144.0f;
-        Colour fillColour = Colour (0xff191c23);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
@@ -196,8 +192,6 @@ BEGIN_JUCER_METADATA
                  initialHeight="295">
   <BACKGROUND backgroundColour="323e44">
     <ROUNDRECT pos="0 0 466 295" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
-    <ROUNDRECT pos="25 24 415 144" cornerSize="10.0" fill="solid: ff191c23"
-               hasStroke="0"/>
   </BACKGROUND>
   <LABEL name="label" id="a12fe4645558f25c" memberName="label1" virtualName=""
          explicitFocusOrder="0" pos="212 3 50 18" edTextCol="ff000000"
@@ -224,6 +218,9 @@ BEGIN_JUCER_METADATA
          edBkgCol="0" labelText="Amount" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
+  <JUCERCOMP name="" id="c3c270a7fb86389" memberName="component" virtualName=""
+             explicitFocusOrder="0" pos="25 24 415 144" sourceFile="LFOGraph.cpp"
+             constructorParams=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

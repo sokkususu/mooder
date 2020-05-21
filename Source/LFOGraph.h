@@ -23,7 +23,6 @@
 #include <JuceHeader.h>
 //[/Headers]
 
-#include "LFOGraph.h"
 
 
 //==============================================================================
@@ -34,13 +33,12 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class LFOComponent  : public Component,
-                      public Slider::Listener
+class LFOGraph  : public Component
 {
 public:
     //==============================================================================
-    LFOComponent (MooderAudioProcessor& p);
-    ~LFOComponent() override;
+    LFOGraph ();
+    ~LFOGraph() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -48,26 +46,18 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    MooderAudioProcessor& processor;
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<Label> label1;
-    std::unique_ptr<Slider> rateSlider;
-    std::unique_ptr<Label> label3;
-    std::unique_ptr<Slider> amountSlider;
-    std::unique_ptr<Label> label4;
-    std::unique_ptr<LFOGraph> component;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFOComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LFOGraph)
 };
 
 //[EndFile] You can add extra defines here...

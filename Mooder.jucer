@@ -17,6 +17,8 @@
       <FILE id="rrHmTb" name="LFOComponent.cpp" compile="1" resource="0"
             file="Source/LFOComponent.cpp"/>
       <FILE id="Tes6K9" name="LFOComponent.h" compile="0" resource="0" file="Source/LFOComponent.h"/>
+      <FILE id="MfuVXO" name="LFOGraph.cpp" compile="1" resource="0" file="Source/LFOGraph.cpp"/>
+      <FILE id="FUbcQ1" name="LFOGraph.h" compile="0" resource="0" file="Source/LFOGraph.h"/>
       <FILE id="WYvuXF" name="Oscillator2Component.cpp" compile="1" resource="0"
             file="Source/Oscillator2Component.cpp"/>
       <FILE id="q8vvRU" name="Oscillator2Component.h" compile="0" resource="0"
@@ -34,9 +36,9 @@
       <FILE id="wPxvPO" name="AudioBufferQueue.h" compile="0" resource="0"
             file="Source/AudioBufferQueue.h"/>
       <FILE id="PfW83L" name="AudioEngine.h" compile="0" resource="0" file="Source/AudioEngine.h"/>
+      <FILE id="WGkJsY" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
       <FILE id="wswuKM" name="CustomOscillator.h" compile="0" resource="0"
             file="Source/CustomOscillator.h"/>
-      <FILE id="WGkJsY" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
     </GROUP>
     <GROUP id="{65BE3360-6B46-1F33-EC3D-BFEAF146437D}" name="Source">
       <FILE id="hxHGlZ" name="OtherLookAndFeel.h" compile="0" resource="0"
