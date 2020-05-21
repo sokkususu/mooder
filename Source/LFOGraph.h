@@ -37,7 +37,7 @@ class LFOGraph  : public Component
 {
 public:
     //==============================================================================
-    LFOGraph ();
+    LFOGraph (MooderAudioProcessor& p);
     ~LFOGraph() override;
 
     //==============================================================================
@@ -51,6 +51,9 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    MooderAudioProcessor& processor;
+
+    float lastFreq, lastAmount;
     //[/UserVariables]
 
     //==============================================================================

@@ -87,7 +87,7 @@ LFOComponent::LFOComponent (MooderAudioProcessor& p)
 
     label4->setBounds (247, 178, 55, 18);
 
-    component.reset (new LFOGraph());
+    component.reset (new LFOGraph (p));
     addAndMakeVisible (component.get());
     component->setBounds (25, 24, 415, 144);
 
@@ -220,7 +220,7 @@ BEGIN_JUCER_METADATA
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <JUCERCOMP name="" id="c3c270a7fb86389" memberName="component" virtualName=""
              explicitFocusOrder="0" pos="25 24 415 144" sourceFile="LFOGraph.cpp"
-             constructorParams=""/>
+             constructorParams="p"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
