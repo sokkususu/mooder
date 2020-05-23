@@ -14,6 +14,8 @@
             file="Source/FilterComponent.cpp"/>
       <FILE id="TuRwfQ" name="FilterComponent.h" compile="0" resource="0"
             file="Source/FilterComponent.h"/>
+      <FILE id="Wfc3rJ" name="FilterGraph.cpp" compile="1" resource="0" file="Source/FilterGraph.cpp"/>
+      <FILE id="ipdBJG" name="FilterGraph.h" compile="0" resource="0" file="Source/FilterGraph.h"/>
       <FILE id="rrHmTb" name="LFOComponent.cpp" compile="1" resource="0"
             file="Source/LFOComponent.cpp"/>
       <FILE id="Tes6K9" name="LFOComponent.h" compile="0" resource="0" file="Source/LFOComponent.h"/>

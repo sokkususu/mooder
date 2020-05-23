@@ -33,10 +33,10 @@ MooderAudioProcessor::MooderAudioProcessor()
             std::make_unique<AudioParameterFloat>("tune2", "Tune2", NormalisableRange<float>(-1.0f, 1.0f), 0.0f),
             std::make_unique<AudioParameterFloat>("level2", "Level2", NormalisableRange<float>(0.0f, 1.0f), 0.7f),
 
-            std::make_unique<AudioParameterFloat>("freqFilterLP", "FreqLP", NormalisableRange<float>(20.0f, 7000.0f), 7000.0f),
+            std::make_unique<AudioParameterFloat>("freqFilterLP", "FreqLP", NormalisableRange<float>(20.0f, 20000.0f), 20000.0f),
             std::make_unique<AudioParameterFloat>("rezFilterLP", "RezLP", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
 
-            std::make_unique<AudioParameterFloat>("freqFilterHP", "FreqHP", NormalisableRange<float>(20.0f, 2000.0f), 20.0f),
+            std::make_unique<AudioParameterFloat>("freqFilterHP", "FreqHP", NormalisableRange<float>(20.0f, 20000.0f), 20.0f),
             std::make_unique<AudioParameterFloat>("rezFilterHP", "RezHP", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
         
             std::make_unique<AudioParameterFloat>("attack", "Attack", NormalisableRange<float>(0.0f, 5.0f), 0.1f),
@@ -47,7 +47,8 @@ MooderAudioProcessor::MooderAudioProcessor()
             std::make_unique<AudioParameterFloat>("freqLFO", "FreqLFO", NormalisableRange<float>(0.0f, 10.0f), 3.0f),
             std::make_unique<AudioParameterFloat>("amountLFO", "AmountLFO", NormalisableRange<float>(0.0f, 1.0f), 0.0f),
 
-        }), waveForm1(1), waveForm2(1), lastSampleRate(44100.0)
+        }), waveForm1(1), waveForm2(1), lastSampleRate(44100.0), filterMode(juce::dsp::LadderFilter<float>::Mode::LPF24),
+        lastFilterMode(juce::dsp::LadderFilter<float>::Mode::LPF24)
 #endif
 {
     
@@ -185,11 +186,11 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
             voice->setTune2((float)*parametrs.getRawParameterValue("tune2"));
             voice->setLevel2((float)*parametrs.getRawParameterValue("level2"));
 
-            voice->setFreqFilterLP((float)*parametrs.getRawParameterValue("freqFilterLP"));
-            voice->setRezFilterLP((float)*parametrs.getRawParameterValue("rezFilterLP"));
+            voice->setFreqFilter((float)*parametrs.getRawParameterValue("freqFilterLP"));
+            voice->setRezFilter((float)*parametrs.getRawParameterValue("rezFilterLP"));
 
-            voice->setFreqFilterHP((float)*parametrs.getRawParameterValue("freqFilterHP"));
-            voice->setRezFilterHP((float)*parametrs.getRawParameterValue("rezFilterHP"));
+            if (filterMode != lastFilterMode)
+                voice->setModeFilter(filterMode);
             
             voice->setADSRSParams(
                 (float)*parametrs.getRawParameterValue("attack"),
@@ -201,6 +202,8 @@ void MooderAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
             voice->setLFOAmount((float)*parametrs.getRawParameterValue("amountLFO"));
         }
     }
+
+    lastFilterMode = filterMode;
     
     midiMessageCollector.removeNextBlockOfMessages (midiMessages, buffer.getNumSamples());
 

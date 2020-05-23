@@ -23,7 +23,6 @@
 #include <JuceHeader.h>
 //[/Headers]
 
-#include "FilterGraph.h"
 
 
 //==============================================================================
@@ -34,14 +33,12 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class FilterComponent  : public Component,
-                         public Slider::Listener,
-                         public Button::Listener
+class FilterGraph  : public Component
 {
 public:
     //==============================================================================
-    FilterComponent (MooderAudioProcessor& p);
-    ~FilterComponent() override;
+    FilterGraph (MooderAudioProcessor& p);
+    ~FilterGraph() override;
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -49,8 +46,6 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
-    void sliderValueChanged (Slider* sliderThatWasMoved) override;
-    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
@@ -60,18 +55,10 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<Slider> rezLPSlider;
-    std::unique_ptr<Label> label2;
-    std::unique_ptr<Label> label1;
-    std::unique_ptr<Slider> freqLPSlider;
-    std::unique_ptr<Label> label3;
-    std::unique_ptr<FilterGraph> component;
-    std::unique_ptr<TextButton> lowpassButton;
-    std::unique_ptr<TextButton> highpassButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterGraph)
 };
 
 //[EndFile] You can add extra defines here...

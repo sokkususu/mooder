@@ -21,14 +21,14 @@
 #include "PluginProcessor.h"
 //[/Headers]
 
-#include "LFOGraph.h"
+#include "FilterGraph.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
 //==============================================================================
-LFOGraph::LFOGraph (MooderAudioProcessor& p)
+FilterGraph::FilterGraph (MooderAudioProcessor& p)
     : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
@@ -42,13 +42,10 @@ LFOGraph::LFOGraph (MooderAudioProcessor& p)
 
 
     //[Constructor] You can add your own custom stuff here..
-
-    lastFreq = 0.0f;
-    lastAmount = 0.0f;
     //[/Constructor]
 }
 
-LFOGraph::~LFOGraph()
+FilterGraph::~FilterGraph()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
@@ -60,7 +57,7 @@ LFOGraph::~LFOGraph()
 }
 
 //==============================================================================
-void LFOGraph::paint (Graphics& g)
+void FilterGraph::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -81,47 +78,49 @@ void LFOGraph::paint (Graphics& g)
         Colour lineColour = Colour(0xff9471E8);
         Colour dotColour = Colours::white;
 
-        float freq = (float)*processor.parametrs.getRawParameterValue("freqLFO");
-        float amount = (float)*processor.parametrs.getRawParameterValue("amountLFO");
+        float freq = (float)*processor.parametrs.getRawParameterValue("freqFilterLP");
+        float rez = (float)*processor.parametrs.getRawParameterValue("rezFilterLP");
 
-        float centrY = height / 2;
-        float widthSin = 0;
-        if (freq != 0)
-            widthSin = width / freq;
-        else
-            widthSin = width / 0.001f;
+        float jfreq = jmap(freq, 20.f, 20000.f, 0.f, 1.f);
+        jfreq = jfreq != 0 ? (log(jfreq) + 10) / 10 : 0;
 
-        float startX = x;
-        float endX = widthSin;
-        float c = widthSin / 2;
+        Point<float> startPoint1{ width * jfreq - height / 2, height };
+        Point<float> endPoint1{ width * jfreq, height / 2 };
+        Point<float> controlPoint1{ width * jfreq - height / 4, height / 2 - 150 * rez };
+        Point<float> controlPoint2{ width * jfreq - height / 4, height / 2 };
 
-        for (int i = 0; i < 10; i++)
+        Point<float> startPoint2{ width * jfreq, height / 2 };
+        Point<float> endPoint2{ width * jfreq + height / 2, height };
+        Point<float> controlPoint3{ width * jfreq + height / 4, height / 2 };
+        Point<float> controlPoint4{ width * jfreq + height / 4, height / 2 - 150 * rez };
+
+        Point<float> startPoint{ 0, height / 2 };
+        Point<float> endPoint{ width, height / 2 };
+
+        Path path;
+
+        if (processor.getFilterMode() != juce::dsp::LadderFilter<float>::Mode::LPF24)
         {
-
-            Point<float> startPoint{ startX, centrY };
-            Point<float> endPoint{ endX, centrY };
-            Point<float> controlPoint1{ c, centrY - (height + 50) * amount };
-            Point<float> controlPoint2{ c, centrY + (height + 50) * amount };
-
-
-            Path path;
+            path.startNewSubPath(startPoint1);
+            path.cubicTo(controlPoint1, controlPoint2, endPoint1);
+            path.lineTo(endPoint);
+        }
+        else
+        {
             path.startNewSubPath(startPoint);
-            path.cubicTo(controlPoint1, controlPoint2, endPoint);
-
-            g.setColour(lineColour);
-            g.strokePath(path, PathStrokeType(3.0f));
-
-            startX += widthSin;
-            endX += widthSin;
-            c += widthSin;
+            path.lineTo(startPoint2);
+            path.cubicTo(controlPoint3, controlPoint4, endPoint2);
         }
 
-            repaint();
+        g.setColour(lineColour);
+        g.strokePath(path, PathStrokeType(3.0f));
+
+        repaint();
     }
     //[/UserPaint]
 }
 
-void LFOGraph::resized()
+void FilterGraph::resized()
 {
     //[UserPreResize] Add your own custom resize code here..
     //[/UserPreResize]
@@ -145,7 +144,7 @@ void LFOGraph::resized()
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="LFOGraph" componentName=""
+<JUCER_COMPONENT documentType="Component" className="FilterGraph" componentName=""
                  parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="415"

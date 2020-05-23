@@ -42,7 +42,7 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     rezLPSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     rezLPSlider->addListener (this);
 
-    rezLPSlider->setBounds (78, 200, 55, 85);
+    rezLPSlider->setBounds (166, 200, 55, 85);
 
     label2.reset (new Label ("label",
                              TRANS("Res")));
@@ -53,7 +53,7 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label2->setBounds (78, 178, 55, 18);
+    label2->setBounds (166, 178, 55, 18);
 
     label1.reset (new Label ("label",
                              TRANS("Filter")));
@@ -68,13 +68,13 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
 
     freqLPSlider.reset (new Slider ("freqLPSlider"));
     addAndMakeVisible (freqLPSlider.get());
-    freqLPSlider->setRange (20, 6000, 1);
+    freqLPSlider->setRange (20, 20000, 1);
     freqLPSlider->setSliderStyle (Slider::Rotary);
     freqLPSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     freqLPSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
     freqLPSlider->addListener (this);
 
-    freqLPSlider->setBounds (163, 200, 55, 85);
+    freqLPSlider->setBounds (251, 200, 55, 85);
 
     label3.reset (new Label ("label",
                              TRANS("Freq")));
@@ -85,49 +85,29 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    label3->setBounds (163, 178, 55, 18);
+    label3->setBounds (251, 178, 55, 18);
 
-    tuneSlider.reset (new Slider ("tuneSlider"));
-    addAndMakeVisible (tuneSlider.get());
-    tuneSlider->setRange (20, 2000, 1);
-    tuneSlider->setSliderStyle (Slider::Rotary);
-    tuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    tuneSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
-    tuneSlider->addListener (this);
+    component.reset (new FilterGraph (p));
+    addAndMakeVisible (component.get());
+    component->setBounds (25, 24, 415, 144);
 
-    tuneSlider->setBounds (247, 200, 55, 85);
+    lowpassButton.reset (new TextButton ("lowpassButton"));
+    addAndMakeVisible (lowpassButton.get());
+    lowpassButton->setButtonText (TRANS("low"));
+    lowpassButton->setRadioGroupId (1);
+    lowpassButton->addListener (this);
+    lowpassButton->setColour (TextButton::buttonColourId, Colour (0xffa45c94));
+    lowpassButton->setColour (TextButton::buttonOnColourId, Colour (0xff68707b));
 
-    label4.reset (new Label ("label",
-                             TRANS("Freq")));
-    addAndMakeVisible (label4.get());
-    label4->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
-    label4->setJustificationType (Justification::centred);
-    label4->setEditable (false, false, false);
-    label4->setColour (TextEditor::textColourId, Colours::black);
-    label4->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+    lowpassButton->setBounds (27, 209, 55, 22);
 
-    label4->setBounds (247, 178, 55, 18);
+    highpassButton.reset (new TextButton ("highpassButton"));
+    addAndMakeVisible (highpassButton.get());
+    highpassButton->setButtonText (TRANS("high"));
+    highpassButton->setRadioGroupId (1);
+    highpassButton->addListener (this);
 
-    levelSlider.reset (new Slider ("levelSlider"));
-    addAndMakeVisible (levelSlider.get());
-    levelSlider->setRange (0, 100, 1);
-    levelSlider->setSliderStyle (Slider::Rotary);
-    levelSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
-    levelSlider->setColour (Slider::textBoxOutlineColourId, Colour (0x008e989b));
-    levelSlider->addListener (this);
-
-    levelSlider->setBounds (333, 200, 55, 85);
-
-    label5.reset (new Label ("label",
-                             TRANS("Res")));
-    addAndMakeVisible (label5.get());
-    label5->setFont (Font (15.00f, Font::plain).withTypefaceStyle ("Regular"));
-    label5->setJustificationType (Justification::centred);
-    label5->setEditable (false, false, false);
-    label5->setColour (TextEditor::textColourId, Colours::black);
-    label5->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
-    label5->setBounds (333, 178, 55, 18);
+    highpassButton->setBounds (27, 234, 55, 22);
 
 
     //[UserPreSize]
@@ -137,7 +117,8 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
 
 
     //[Constructor] You can add your own custom stuff here..
-    freqLPSlider->setValue(6000.0f);
+    freqLPSlider->setValue(20000.0f);
+    freqLPSlider->setSkewFactorFromMidPoint(500);
     //[/Constructor]
 }
 
@@ -151,10 +132,9 @@ FilterComponent::~FilterComponent()
     label1 = nullptr;
     freqLPSlider = nullptr;
     label3 = nullptr;
-    tuneSlider = nullptr;
-    label4 = nullptr;
-    levelSlider = nullptr;
-    label5 = nullptr;
+    component = nullptr;
+    lowpassButton = nullptr;
+    highpassButton = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -170,15 +150,6 @@ void FilterComponent::paint (Graphics& g)
     {
         float x = 0.0f, y = 0.0f, width = 466.0f, height = 295.0f;
         Colour fillColour = Colour (0xff373e46);
-        //[UserPaintCustomArguments] Customize the painting arguments here..
-        //[/UserPaintCustomArguments]
-        g.setColour (fillColour);
-        g.fillRoundedRectangle (x, y, width, height, 10.000f);
-    }
-
-    {
-        float x = 25.0f, y = 24.0f, width = 415.0f, height = 144.0f;
-        Colour fillColour = Colour (0xff191c23);
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (fillColour);
@@ -212,24 +183,36 @@ void FilterComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == freqLPSlider.get())
     {
         //[UserSliderCode_freqLPSlider] -- add your slider handling code here..
-        processor.setParameterNotifyingHost(8, sliderThatWasMoved->getValue() / 6980);
+        float value = sliderThatWasMoved->getValue();
+        float jvalue = jmap(value, (float)sliderThatWasMoved->getMinimum(), (float)sliderThatWasMoved->getMaximum(), 0.f, 1.f);
+        processor.setParameterNotifyingHost(8, jvalue);
         //[/UserSliderCode_freqLPSlider]
-    }
-    else if (sliderThatWasMoved == tuneSlider.get())
-    {
-        //[UserSliderCode_tuneSlider] -- add your slider handling code here..
-        processor.setParameterNotifyingHost(10, sliderThatWasMoved->getValue() / 1980);
-        //[/UserSliderCode_tuneSlider]
-    }
-    else if (sliderThatWasMoved == levelSlider.get())
-    {
-        //[UserSliderCode_levelSlider] -- add your slider handling code here..
-        processor.setParameterNotifyingHost(11, sliderThatWasMoved->getValue() / 100);
-        //[/UserSliderCode_levelSlider]
     }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
+}
+
+void FilterComponent::buttonClicked (Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == lowpassButton.get())
+    {
+        //[UserButtonCode_lowpassButton] -- add your button handler code here..
+        processor.setFilterMode(juce::dsp::LadderFilter<float>::Mode::LPF24);
+        //[/UserButtonCode_lowpassButton]
+    }
+    else if (buttonThatWasClicked == highpassButton.get())
+    {
+        //[UserButtonCode_highpassButton] -- add your button handler code here..
+        processor.setFilterMode(juce::dsp::LadderFilter<float>::Mode::HPF24);
+        //[/UserButtonCode_highpassButton]
+    }
+
+    //[UserbuttonClicked_Post]
+    //[/UserbuttonClicked_Post]
 }
 
 
@@ -254,16 +237,14 @@ BEGIN_JUCER_METADATA
                  initialHeight="295">
   <BACKGROUND backgroundColour="43786c">
     <ROUNDRECT pos="0 0 466 295" cornerSize="10.0" fill="solid: ff373e46" hasStroke="0"/>
-    <ROUNDRECT pos="25 24 415 144" cornerSize="10.0" fill="solid: ff191c23"
-               hasStroke="0"/>
   </BACKGROUND>
   <SLIDER name="rezLPSlider" id="56f2a6e81fe5f959" memberName="rezLPSlider"
-          virtualName="" explicitFocusOrder="0" pos="78 200 55 85" textboxoutline="8e989b"
+          virtualName="" explicitFocusOrder="0" pos="166 200 55 85" textboxoutline="8e989b"
           min="0.0" max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="fc4b9114d12d20a0" memberName="label2" virtualName=""
-         explicitFocusOrder="0" pos="78 178 55 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="166 178 55 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Res" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
@@ -273,35 +254,25 @@ BEGIN_JUCER_METADATA
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
   <SLIDER name="freqLPSlider" id="bef96203430a69c3" memberName="freqLPSlider"
-          virtualName="" explicitFocusOrder="0" pos="163 200 55 85" textboxoutline="8e989b"
-          min="20.0" max="6000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
+          virtualName="" explicitFocusOrder="0" pos="251 200 55 85" textboxoutline="8e989b"
+          min="20.0" max="20000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <LABEL name="label" id="5af8dfe48cce0964" memberName="label3" virtualName=""
-         explicitFocusOrder="0" pos="163 178 55 18" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="251 178 55 18" edTextCol="ff000000"
          edBkgCol="0" labelText="Freq" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
          kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="tuneSlider" id="4f1fb4ab86f17cd7" memberName="tuneSlider"
-          virtualName="" explicitFocusOrder="0" pos="247 200 55 85" textboxoutline="8e989b"
-          min="20.0" max="2000.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
-  <LABEL name="label" id="ebeda905bdad0cb" memberName="label4" virtualName=""
-         explicitFocusOrder="0" pos="247 178 55 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="Freq" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
-         kerning="0.0" bold="0" italic="0" justification="36"/>
-  <SLIDER name="levelSlider" id="b78d17951dec2b84" memberName="levelSlider"
-          virtualName="" explicitFocusOrder="0" pos="333 200 55 85" textboxoutline="8e989b"
-          min="0.0" max="100.0" int="1.0" style="Rotary" textBoxPos="TextBoxBelow"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
-  <LABEL name="label" id="a0556e081db737b8" memberName="label5" virtualName=""
-         explicitFocusOrder="0" pos="333 178 55 18" edTextCol="ff000000"
-         edBkgCol="0" labelText="Res" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15.0"
-         kerning="0.0" bold="0" italic="0" justification="36"/>
+  <JUCERCOMP name="" id="ff4a36b937af9f1a" memberName="component" virtualName=""
+             explicitFocusOrder="0" pos="25 24 415 144" sourceFile="FilterGraph.cpp"
+             constructorParams="p"/>
+  <TEXTBUTTON name="lowpassButton" id="3fc0debbaf133902" memberName="lowpassButton"
+              virtualName="" explicitFocusOrder="0" pos="27 209 55 22" bgColOff="ffa45c94"
+              bgColOn="ff68707b" buttonText="low" connectedEdges="0" needsCallback="1"
+              radioGroupId="1"/>
+  <TEXTBUTTON name="highpassButton" id="a6a275cc2c04a8e3" memberName="highpassButton"
+              virtualName="" explicitFocusOrder="0" pos="27 234 55 22" buttonText="high"
+              connectedEdges="0" needsCallback="1" radioGroupId="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

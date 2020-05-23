@@ -26,11 +26,8 @@ public:
         octave2 = 0;
         transp2 = 0;
 
-        freqFilterLP = 20000.0f;
-        rezFilterLP = 0.0f;
-
-        freqFilterHP = 20.0f;
-        rezFilterHP = 0.0f;
+        freqFilter = 20000.0f;
+        rezFilter = 0.0f;
 
         env = 0;
         velocity = 0;
@@ -41,15 +38,10 @@ public:
         auto &masterGain = processorChain.get<masterGainIndex>();
         masterGain.setGainLinear(0.7f);
 
-        auto &filterLP = processorChain.get<filterLPIndex>();
-        filterLP.setCutoffFrequencyHz(freqFilterLP);
-        filterLP.setResonance(rezFilterLP);
+        auto &filterLP = processorChain.get<filterIndex>();
+        filterLP.setCutoffFrequencyHz(freqFilter);
+        filterLP.setResonance(rezFilter);
         filterLP.setMode(juce::dsp::LadderFilter<float>::Mode::LPF24);
-
-        auto &filterHP = processorChain.get<filterHPIndex>();
-        filterHP.setCutoffFrequencyHz(freqFilterHP);
-        filterHP.setResonance(rezFilterHP);
-        filterHP.setMode(juce::dsp::LadderFilter<float>::Mode::HPF24);
 
         lfo.initialise([](float x) { return std::sin(x); }, 128);
         lfo.setFrequency(freqLFO);
@@ -113,13 +105,9 @@ public:
         processorChain.get<osc2Index>().setFrequency(freq2, true);
         processorChain.get<osc2Index>().setLevel(velocity * level2 * env);
 
-        auto& filterLP = processorChain.get<filterLPIndex>();
-        filterLP.setCutoffFrequencyHz(freqFilterLP);
-        filterLP.setResonance(rezFilterLP);
-
-        auto& filterHP = processorChain.get<filterHPIndex>();
-        filterHP.setCutoffFrequencyHz(freqFilterHP);
-        filterHP.setResonance(rezFilterHP);
+        auto& filterLP = processorChain.get<filterIndex>();
+        filterLP.setCutoffFrequencyHz(freqFilter);
+        filterLP.setResonance(rezFilter);
 
         lfo.setFrequency(freqLFO);
 
@@ -172,11 +160,9 @@ public:
     void setTune2(float t) { tune2 = t; }
     void setLevel2(float lvl) { level2 = lvl; }
 
-    void setFreqFilterLP(float freq) { freqFilterLP = freq; }
-    void setRezFilterLP(float rez) { rezFilterLP = rez; }
-
-    void setFreqFilterHP(float freq) { freqFilterHP = freq; }
-    void setRezFilterHP(float rez) { rezFilterHP = rez; }
+    void setFreqFilter(float freq) { freqFilter = freq; }
+    void setRezFilter(float rez) { rezFilter = rez; }
+    void setModeFilter(juce::dsp::LadderFilter<float>::Mode mode) { processorChain.get<filterIndex>().setMode(mode); }
 
     void setADSRSampleRate(double sampleRate) { adsr.setSampleRate(sampleRate); }
     void setADSRSParams(float attack, float decay, float sustain, float release)
@@ -198,8 +184,7 @@ private:
     float tune1, tune2;
     float level1, level2;
 
-    float freqFilterLP, rezFilterLP;
-    float freqFilterHP, rezFilterHP;
+    float freqFilter, rezFilter;
 
     float freqLFO;
     float amountLFO;
@@ -215,15 +200,13 @@ private:
     {
         osc1Index,
         osc2Index,
-        filterLPIndex,
-        filterHPIndex,
+        filterIndex,
         masterGainIndex
     };
 
     juce::dsp::ProcessorChain<
         CustomOscillator<float>,
         CustomOscillator<float>,
-        juce::dsp::LadderFilter<float>,
         juce::dsp::LadderFilter<float>,
         juce::dsp::Gain<float>>
         processorChain;

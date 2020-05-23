@@ -68,14 +68,22 @@ public:
 
     void setWaveForm1(int wf) { waveForm1 = wf; }
     void setWaveForm2(int wf) { waveForm2 = wf; }
+
+    void setFilterMode(juce::dsp::LadderFilter<float>::Mode mode) { filterMode = mode; }
+
+    juce::dsp::LadderFilter<float>::Mode getFilterMode() { return filterMode; }
 private:
     int waveForm1, waveForm2;
     double lastSampleRate;
+    
 
     AudioEngine audioEngine;
     MidiMessageCollector midiMessageCollector;
     AudioBufferQueue<float> audioBufferQueue;
     ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
+
+    juce::dsp::LadderFilter<float>::Mode filterMode;
+    juce::dsp::LadderFilter<float>::Mode lastFilterMode;
     //==============================================================================
 
     //==============================================================================
