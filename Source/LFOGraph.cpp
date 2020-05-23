@@ -32,6 +32,7 @@ LFOGraph::LFOGraph (MooderAudioProcessor& p)
     : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    setFramesPerSecond(60);
     //[/Constructor_pre]
 
 
@@ -115,8 +116,6 @@ void LFOGraph::paint (Graphics& g)
             endX += widthSin;
             c += widthSin;
         }
-
-            repaint();
     }
     //[/UserPaint]
 }
@@ -133,6 +132,16 @@ void LFOGraph::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void LFOGraph::timerCallback()
+{
+    repaint();
+}
+
+void LFOGraph::setFramesPerSecond(int framesPerSecond)
+{
+    jassert(framesPerSecond > 0 && framesPerSecond < 1000);
+    startTimerHz(framesPerSecond);
+}
 //[/MiscUserCode]
 
 
@@ -146,7 +155,7 @@ void LFOGraph::resized()
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="LFOGraph" componentName=""
-                 parentClasses="public Component" constructorParams="MooderAudioProcessor&amp; p"
+                 parentClasses="public Component, public Timer" constructorParams="MooderAudioProcessor&amp; p"
                  variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="415"
                  initialHeight="144">

@@ -33,7 +33,8 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class LFOGraph  : public Component
+class LFOGraph  : public Component,
+                  public Timer
 {
 public:
     //==============================================================================
@@ -42,6 +43,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void timerCallback() override;
+    void setFramesPerSecond(int framesPerSecond);
     //[/UserMethods]
 
     void paint (Graphics& g) override;
