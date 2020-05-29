@@ -29,6 +29,10 @@ public:
         if (waveForm == 2)
             osc.initialise([](Type x) { return  jmap(x, Type(-MathConstants <double>::pi), 
                 Type(MathConstants<double>::pi), Type(-1), Type(1)); }, 2);
+        if (waveForm == 3)
+            osc.initialise([](Type x) { return std::sin(x); }, 4);
+        if (waveForm == 4)
+            osc.initialise([](Type x) { return std::tanh(20 * std::sin(x)); }, 128);
     }
 
     //==============================================================================

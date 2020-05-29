@@ -25,7 +25,7 @@ public:
         : audioBufferQueue (queueToUse)
     {
         sampleData.fill (SampleType (0));
-        setFramesPerSecond (60);
+        setFramesPerSecond (30);
     }
 
     //==============================================================================
@@ -38,8 +38,11 @@ public:
     //==============================================================================
     void paint (Graphics& g) override
     {
-        g.fillAll (juce::Colours::black);
-        g.setColour (juce::Colours::white);
+        Colour fillColour = Colour(0xff191c23);
+        Colour lineColour = Colour(0xff9471E8);
+
+        g.fillAll (fillColour);
+        g.setColour (lineColour);
 
         auto area = getLocalBounds();
         auto h = (SampleType) area.getHeight();
@@ -66,11 +69,6 @@ private:
     void timerCallback() override
     {
         audioBufferQueue.pop (sampleData.data());
-
-        //auto fftSize = (size_t) fft.getSize();
-
-        //static constexpr auto mindB = SampleType (-160);
-        //static constexpr auto maxdB = SampleType (0);
 
         repaint();
     }

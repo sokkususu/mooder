@@ -62,8 +62,8 @@ OscillatorComponent::OscillatorComponent (MooderAudioProcessor& p)
     sinButton->setButtonText (TRANS("sin"));
     sinButton->setRadioGroupId (1);
     sinButton->addListener (this);
-    sinButton->setColour (TextButton::buttonColourId, Colour (0xffa45c94));
-    sinButton->setColour (TextButton::buttonOnColourId, Colour (0xff68707b));
+    sinButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    sinButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     sinButton->setBounds (18, 33, 55, 22);
 
@@ -72,6 +72,8 @@ OscillatorComponent::OscillatorComponent (MooderAudioProcessor& p)
     sawButton->setButtonText (TRANS("saw"));
     sawButton->setRadioGroupId (1);
     sawButton->addListener (this);
+    sawButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    sawButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     sawButton->setBounds (18, 58, 55, 22);
 
@@ -80,6 +82,8 @@ OscillatorComponent::OscillatorComponent (MooderAudioProcessor& p)
     triButton->setButtonText (TRANS("tri"));
     triButton->setRadioGroupId (1);
     triButton->addListener (this);
+    triButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    triButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     triButton->setBounds (18, 83, 55, 22);
 
@@ -88,6 +92,8 @@ OscillatorComponent::OscillatorComponent (MooderAudioProcessor& p)
     sqrButton->setButtonText (TRANS("sqr"));
     sqrButton->setRadioGroupId (1);
     sqrButton->addListener (this);
+    sqrButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    sqrButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     sqrButton->setBounds (18, 108, 55, 22);
 
@@ -181,6 +187,13 @@ OscillatorComponent::OscillatorComponent (MooderAudioProcessor& p)
 
     //[Constructor] You can add your own custom stuff here..
     levelSlider->setValue(0.7);
+
+    sinButton->setClickingTogglesState(true);
+    triButton->setClickingTogglesState(true);
+    sawButton->setClickingTogglesState(true);
+    sqrButton->setClickingTogglesState(true);
+
+    sinButton->setToggleState(true, false);
     //[/Constructor]
 }
 
@@ -290,11 +303,13 @@ void OscillatorComponent::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == triButton.get())
     {
         //[UserButtonCode_triButton] -- add your button handler code here..
+        processor.setWaveForm1(3);
         //[/UserButtonCode_triButton]
     }
     else if (buttonThatWasClicked == sqrButton.get())
     {
         //[UserButtonCode_sqrButton] -- add your button handler code here..
+        processor.setWaveForm1(4);
         //[/UserButtonCode_sqrButton]
     }
 
@@ -336,18 +351,21 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15.0" kerning="0.0" bold="0" italic="0" justification="36"/>
   <TEXTBUTTON name="sinButton" id="3fc0debbaf133902" memberName="sinButton"
-              virtualName="" explicitFocusOrder="0" pos="18 33 55 22" bgColOff="ffa45c94"
-              bgColOn="ff68707b" buttonText="sin" connectedEdges="0" needsCallback="1"
+              virtualName="" explicitFocusOrder="0" pos="18 33 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="sin" connectedEdges="0" needsCallback="1"
               radioGroupId="1"/>
   <TEXTBUTTON name="sawButton" id="a6a275cc2c04a8e3" memberName="sawButton"
-              virtualName="" explicitFocusOrder="0" pos="18 58 55 22" buttonText="saw"
-              connectedEdges="0" needsCallback="1" radioGroupId="1"/>
+              virtualName="" explicitFocusOrder="0" pos="18 58 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="saw" connectedEdges="0" needsCallback="1"
+              radioGroupId="1"/>
   <TEXTBUTTON name="triButton" id="468fb96311d92778" memberName="triButton"
-              virtualName="" explicitFocusOrder="0" pos="18 83 55 22" buttonText="tri"
-              connectedEdges="0" needsCallback="1" radioGroupId="1"/>
+              virtualName="" explicitFocusOrder="0" pos="18 83 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="tri" connectedEdges="0" needsCallback="1"
+              radioGroupId="1"/>
   <TEXTBUTTON name="sqrButton" id="9198417e1a65f8c" memberName="sqrButton"
-              virtualName="" explicitFocusOrder="0" pos="18 108 55 22" buttonText="sqr"
-              connectedEdges="0" needsCallback="1" radioGroupId="1"/>
+              virtualName="" explicitFocusOrder="0" pos="18 108 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="sqr" connectedEdges="0" needsCallback="1"
+              radioGroupId="1"/>
   <LABEL name="label" id="a12fe4645558f25c" memberName="label1" virtualName=""
          explicitFocusOrder="0" pos="208 3 50 18" textCol="ffdedede" edTextCol="ff000000"
          edBkgCol="0" labelText="OSC1" editableSingleClick="0" editableDoubleClick="0"

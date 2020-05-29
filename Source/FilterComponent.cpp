@@ -96,8 +96,8 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     lowpassButton->setButtonText (TRANS("low"));
     lowpassButton->setRadioGroupId (1);
     lowpassButton->addListener (this);
-    lowpassButton->setColour (TextButton::buttonColourId, Colour (0xffa45c94));
-    lowpassButton->setColour (TextButton::buttonOnColourId, Colour (0xff68707b));
+    lowpassButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    lowpassButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     lowpassButton->setBounds (27, 209, 55, 22);
 
@@ -106,6 +106,8 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     highpassButton->setButtonText (TRANS("high"));
     highpassButton->setRadioGroupId (1);
     highpassButton->addListener (this);
+    highpassButton->setColour (TextButton::buttonColourId, Colour (0xff68707b));
+    highpassButton->setColour (TextButton::buttonOnColourId, Colour (0xff9471e8));
 
     highpassButton->setBounds (27, 234, 55, 22);
 
@@ -119,6 +121,11 @@ FilterComponent::FilterComponent (MooderAudioProcessor& p)
     //[Constructor] You can add your own custom stuff here..
     freqLPSlider->setValue(20000.0f);
     freqLPSlider->setSkewFactorFromMidPoint(500);
+
+    lowpassButton->setClickingTogglesState(true);
+    highpassButton->setClickingTogglesState(true);
+
+    lowpassButton->setToggleState(true, false);
     //[/Constructor]
 }
 
@@ -267,12 +274,13 @@ BEGIN_JUCER_METADATA
              explicitFocusOrder="0" pos="25 24 415 144" sourceFile="FilterGraph.cpp"
              constructorParams="p"/>
   <TEXTBUTTON name="lowpassButton" id="3fc0debbaf133902" memberName="lowpassButton"
-              virtualName="" explicitFocusOrder="0" pos="27 209 55 22" bgColOff="ffa45c94"
-              bgColOn="ff68707b" buttonText="low" connectedEdges="0" needsCallback="1"
+              virtualName="" explicitFocusOrder="0" pos="27 209 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="low" connectedEdges="0" needsCallback="1"
               radioGroupId="1"/>
   <TEXTBUTTON name="highpassButton" id="a6a275cc2c04a8e3" memberName="highpassButton"
-              virtualName="" explicitFocusOrder="0" pos="27 234 55 22" buttonText="high"
-              connectedEdges="0" needsCallback="1" radioGroupId="1"/>
+              virtualName="" explicitFocusOrder="0" pos="27 234 55 22" bgColOff="ff68707b"
+              bgColOn="ff9471e8" buttonText="high" connectedEdges="0" needsCallback="1"
+              radioGroupId="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

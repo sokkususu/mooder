@@ -57,18 +57,21 @@ public:
         auto width = button.getWidth();
         auto height = button.getHeight();
 
-        g.setColour(Colour(0xff68707B));
+        g.setColour(Colour(backgroundColour));
         g.fillRoundedRectangle(0, 0, width, height, 11);
 
         if (isMouseOverButton)
         {
-            g.setColour(Colour(0xff8D949E));
+            if (Colour(backgroundColour) != Colour(0xff9471E8))
+                g.setColour(Colour(0xff8D949E));
+            else
+                g.setColour(Colour(0xffA481F8));
             g.fillRoundedRectangle(0, 0, width, height, 11);
         }
 
         if (isButtonDown) 
         {
-            g.setColour(Colour(0xff9471E8));
+            g.setColour(Colour(0xffA481F8));
             g.fillRoundedRectangle(0, 0, width, height, 11);
         }
     }
